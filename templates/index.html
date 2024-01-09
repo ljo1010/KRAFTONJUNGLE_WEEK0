@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>크래프톤 정글 TEAM5 | RECORD GORMET</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-
+    <!-- 카카오 맵 API 스크립트를 포함합니다. -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(document).ready(function () {
             createMarker()
@@ -42,16 +44,25 @@
     <!-- Map Container -->
     <div id="map" style="width: 500px; height: 400px;"></div> 
     
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
+    
     <script type="text/javascript">
-        var container = document.getElementById('map');
-        var options = {
-            center: new kakao.maps.LatLng(37.297875428836804, 127.03861803212595),
-            level: 3
-        };
+        $(document).ready(function () {
+            // 카카오 맵 API 로드가 완료된 후에 initMap 함수 호출
+            kakao.maps.load(initMap);
+        });
 
-        var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+        function initMap() {
+            var container = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(37.297875428836804, 127.03861803212595),
+                level: 3
+            };
 
+            var map = new kakao.maps.Map(container, options);
+
+            // createMarker 함수 호출
+            createMarker(map);
+        }
 
 
         function createMarker(){ 
@@ -84,15 +95,7 @@
             }
             })
         }
-
-	// // 마커가 표시될 위치입니다 
-	// var markerPosition  = new kakao.maps.LatLng(37.297875428836804, 127.03861803212595); 
-
-	
-    
- 
-	
-	</script>
+	    </script>
 
 </body>
 </html>
