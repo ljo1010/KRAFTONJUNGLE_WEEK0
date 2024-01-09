@@ -39,17 +39,23 @@ def api_register():
    pw_receive = request.form['pw_give']
    nickname = request.form['nickname_give']
 
+   # 사용자 ID 중복 검사
+   existing_user = db.user.find_one({'userId': id_receive})
+   if existing_user:
+      return render_template('register.html', msg='이미 존재하는 사용자 ID입니다.')
+
+   # 중복된 사용자가 없으면 회원 정보 데이터베이스에 저장
    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-
    doc = {
-      "userId": id_receive,  # 아이디
-      "password": pw_hash,  # 비밀번호
-      "nickname": nickname  # 닉네임
+      "userId": id_receive,
+      "password": pw_hash,
+      "nickname": nickname
    }
-
    db.user.insert_one(doc)
 
-   return jsonify({'result': 'success'})
+   # 회원가입 성공, 로그인 페이지로 리디렉트
+   return redirect(url_for('login'))
+
 
 # [로그인 API]
 @app.route('/api/login', methods=['POST'])
