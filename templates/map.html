@@ -5,16 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>크래프톤 정글 TEAM5 | RECORD GORMET</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-   <style>
-    .star {
-        color: gray;
-        cursor: pointer;
-        font-size: 30px;
-    }
-    .star.rated {
-        color:gold;
-    }
-    </style>
+  
+  
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -43,41 +35,12 @@
             <img src="https://bulma.io/images/placeholders/128x128.png">
           </p>
         </figure>
-        <!-- 별점시스템 만들기 -->
-        <div class="stars">
-            <span class="star" data-value="1">&#9733;</span>
-            <span class="star" data-value="2">&#9733;</span>
-            <span class="star" data-value="3">&#9733;</span>
-            <span class="star" data-value="4">&#9733;</span>
-            <span class="star" data-value="5">&#9733;</span>
-        </div>
-        <script>
-            const stars = document.querySelectorAll('.star');
-            const ratingDisplay = document.getElementById('rating-display');
-    
-            stars.forEach(star => {
-              star.addEventListener('click', function() {
-                let rating = this.getAttribute('data-value');
-                ratingDisplay.textContent = 'Rating: ' + rating;
-    
-                // Update the visual appearance
-                stars.forEach(star => {
-                  star.classList.remove('rated');
-                });
-    
-                this.classList.add('rated');
-                this.previousElementSibling.classList.add('rated');
-                this.nextElementSibling.classList.add('rated');
-              });
-            });
-        </script>
-
-        <p id="rating-display">Rating: 0</p>
+        
         <!-- 코멘트를 쓰는 박스 만들기 -->
         <div class="media-content">
           <div class="field">
             <p class="control">
-              <textarea class="textarea is-sucess" placeholder="Add a comment..."></textarea>
+              <textarea class="textarea is-sucess" placeholder="음식점이 어땠는지 알려주세요"></textarea>
             </p>
           </div>
           <nav class="level">
