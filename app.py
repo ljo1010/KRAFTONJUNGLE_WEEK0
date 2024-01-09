@@ -96,11 +96,6 @@ def api_login():
 def create_marker():
    data = list(db.total.find({}, {'_id': 0}))  # _id 필드를 제외하고 데이터 조회
    return jsonify({'result': 'success','data_list':data})
-
-
-
-
-
-   
+ 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
