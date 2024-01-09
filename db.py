@@ -1,15 +1,41 @@
 import requests
+import json
 from bs4 import BeautifulSoup
 
-# 타겟 URL을 읽어서 HTML를 받아오고,
-headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-data = requests.get('https://map.kakao.com/',headers=headers)
+url = 'http://ip-api.com/json'
+data = requests.get(url)
 
-# HTML을 BeautifulSoup이라는 라이브러리를 활용해 검색하기 용이한 상태로 만듦
-# soup이라는 변수에 "파싱 용이해진 html"이 담긴 상태가 됨
-# 이제 코딩을 통해 필요한 부분을 추출하면 된다.
-soup = BeautifulSoup(data.text, 'html.parser')
-print(soup)  # HTML을 받아온 것을 확인할 수 있다.
+res = data.json()
+
+url = 'https://dapi.kakao.com/v2/local/search/keyword.json'
+
+params1 = {'query' : '광교역 맛집', 'y' : res['lon'], 'x' :  res['lat'],'page': 1,'category_group_code' : 'FD6'}
+params2 = {'query' : '광교역 맛집', 'y' : res['lon'], 'x' :  res['lat'],'page': 2,'category_group_code' : 'FD6'}
+params3 = {'query' : '광교역 맛집', 'y' : res['lon'], 'x' :  res['lat'],'page': 3,'category_group_code' : 'FD6'}
+
+
+
+headers = {"Authorization": "KakaoAK 8d61961ba50195955fc28aad2b263489"}
+total1 = requests.get(url, params=params1, headers=headers).json()['documents']
+total2 = requests.get(url, params=params2, headers=headers).json()['documents']
+total3 = requests.get(url, params=params3, headers=headers).json()['documents']
+
+
+total=total1+total2+total3
+
+
+for i in range(0,len(total)-1):
+    placename=total[i]['place_name']
+    lat=total[i]['x']
+    lng=total[i]['y']
+
+
+
+
+
+
+
+
 
 
 
