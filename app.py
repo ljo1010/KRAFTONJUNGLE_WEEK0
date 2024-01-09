@@ -18,13 +18,19 @@ db = client.dbtest
 # JWT 토큰 생성을 위한 비밀 키 - 이 키는 비밀로 유지되어야 합니다
 SECRET_KEY = 'JUNGLE'
 
-
-## URL 별로 함수명이 같거나,
-## route('/') 등의 주h소가 같으면 안됩니다.
-
 @app.route('/')
 def home():
    return render_template('index.html')
+
+@app.route('/login')
+def login():
+   msg = request.args.get("msg")
+   return render_template('login.html', msg=msg)
+
+
+@app.route('/register')
+def register():
+   return render_template('register.html')
 
 # [회원가입 API]
 @app.route('/api/register', methods=['POST'])
@@ -67,4 +73,4 @@ def api_login():
       return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
    
 if __name__ == '__main__':
-   app.run('0.0.0.0', port=5000, debug=True)
+   app.run('0.0.0.0', port=5001, debug=True)
