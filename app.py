@@ -12,7 +12,7 @@ from pymongo import MongoClient
 app = Flask(__name__)
 
 # MongoDB 클라이언트 설정
-client = MongoClient("localhost", 27017)
+client = MongoClient("mongodb://team5:team5@13.125.172.222", 27017)
 db = client.dbtest
 
 # JWT 토큰 생성을 위한 비밀 키 - 이 키는 비밀로 유지되어야 합니다
