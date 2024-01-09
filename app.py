@@ -94,7 +94,7 @@ def api_login():
 # [마커 생성 API]
 @app.route('/api/createMarker',methods=['POST'])
 def create_marker():
-   data=list(db.total.find({}))
+   data = list(db.total.find({}, {'_id': 0}))  # _id 필드를 제외하고 데이터 조회
    return jsonify({'result': 'success','data_list':data})
 
 
