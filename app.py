@@ -91,9 +91,15 @@ def api_login():
       return render_template('login.html', msg='아이디/비밀번호가 일치하지 않습니다.')
    
 
-# # [마커 생성 API]
-# @app.route('/api/createMarker',methods=['GET'])
-# def create_marker():
+# [마커 생성 API]
+@app.route('/api/createMarker',methods=['POST'])
+def create_marker():
+   data=list(db.total.find({}))
+   return jsonify({'result': 'success','data_list':data})
+
+
+
+
 
    
 if __name__ == '__main__':
