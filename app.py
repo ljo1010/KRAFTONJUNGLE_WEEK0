@@ -48,6 +48,11 @@ def api_register():
    existing_user = db.user.find_one({'userId': id_receive})
    if existing_user:
       return render_template('register.html', msg='이미 존재하는 사용자 ID입니다.')
+   
+   # nickname 중복 검사
+   existing_user = db.user.find_one({'nickname': nickname})
+   if existing_user:
+      return render_template('register.html', msg='이미 존재하는 nickname입니다.')   
 
    # 중복된 사용자가 없으면 회원 정보 데이터베이스에 저장
    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
