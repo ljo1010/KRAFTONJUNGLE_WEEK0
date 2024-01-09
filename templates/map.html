@@ -21,16 +21,43 @@
         </div>
     </nav>
 
-	<article class="message is-info">
-		<div class="message-header">
-		  <p>메인화면</p>
-		  <button class="delete" aria-label="delete"></button>
-		</div>
-		<div class="message-body">
-		  정글러들에게 공유하고 싶은 맛집을 등록해주세요!
-		  <input class="input is-primary" type="text" placeholder="Primary input">
-	  </div>
-	  </article>
+    <div class="tile is-parent">
+        <article class="tile is-child notification is-danger">
+          <p class="title">지도가 들어갈 화면</p>
+          <p class="subtitle"></p>
+          <div class="content">
+
+    <article class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img src="https://bulma.io/images/placeholders/128x128.png">
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="field">
+            <p class="control">
+              <textarea class="textarea" placeholder="Add a comment..."></textarea>
+            </p>
+          </div>
+          <nav class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <a class="button is-info">Submit</a>
+              </div>
+            </div>
+            <div class="level-right">
+                <div class="level-item">
+                  <a class="button is-danger">Cancel</a>
+                </div>
+              </div>
+            <div class="level-right">
+              <div class="level-item">
+              </div>
+            </div>
+          </nav>
+        </div>
+      </article>
+
 
     <!-- Map Container -->
     <div id="map" style="width: 500px; height: 400px;"></div> 
