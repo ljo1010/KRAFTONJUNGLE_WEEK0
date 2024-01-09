@@ -6,13 +6,8 @@
     <title>크래프톤 정글 TEAM5 | RECORD GORMET</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <!-- 카카오 맵 API 스크립트를 포함합니다. -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
+    <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            createMarker()
-        });
-    </script>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -67,7 +62,7 @@
 
         function createMarker(map){ 
             $.ajax({
-                type: "POST",
+                type:"POST",
                 url:"/api/createMarker",
                 data: {},
                 success: function(response){
@@ -78,21 +73,23 @@
                     let data=datalist[i]
                     let placename=data['placename']
                     let url=data['place_url']
-                    let lat=data['lat']
-                    let lng=data['lng']
+                    let lat = parseFloat(data['lat']);  // 문자열을 숫자로 변환
+                    let lng = parseFloat(data['lng']);  // 문자열을 숫자로 변환
 
                     // 마커가 표시될 위치입니다 
-	                var markerPosition  = new kakao.maps.LatLng(lng[i], lat[i]);
+	                var markerPosition  = new kakao.maps.LatLng(lng, lat);
 
                     // 마커를 생성합니다
 	                var marker = new kakao.maps.Marker({
                         position: markerPosition
 	                            });
 
+                    // 마커가 지도 위에 표시되도록 설정합니다
+	                marker.setMap(map);
+
                     }
-                     // 마커가 지도 위에 표시되도록 설정합니다
-	                        marker.setMap(map);
-            }
+                    
+                 }
             })
         }
 	    </script>
