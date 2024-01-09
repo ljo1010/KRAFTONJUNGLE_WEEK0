@@ -32,6 +32,11 @@ def login():
 def register():
    return render_template('register.html')
 
+@app.route('/main')
+def main():
+   msg = request.args.get("msg")
+   return render_template('main.html', msg=msg)
+
 # [회원가입 API]
 @app.route('/api/register', methods=['POST'])
 def api_register():
@@ -74,9 +79,11 @@ def api_login():
       }
       token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
       
-      return jsonify({'result': 'success', 'token': token})
+# 로그인 성공, main.html로 리디렉트
+      return redirect(url_for('main'))
    else:
-      return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+# 로그인 실패, 로그인 페이지에 에러 메시지와 함께 렌더링
+      return render_template('login.html', msg='아이디/비밀번호가 일치하지 않습니다.')
    
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
