@@ -1,11 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>크래프톤 정글 TEAM5 | RECORD GORMET</title>
+    <title>크래프톤 정글 TEAM5 | Gourmet in Jungle</title>
+    <!-- bulma css 추가 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
+<style>
+body {
+  background-color: #fff;
+  color: #111111;
+}
+
+#container {
+  margin: 0 auto;
+  max-width: 120px;
+  text-align: center;
+}
+
+#container h1 {
+  font-weight: normal;
+  text-transform: uppercase;
+  margin: 0.5em 0;
+  position: relative;
+  display: inline-block;
+  padding: 0 1px;
+  font-size: 36px;
+}
+
+.style-1 {
+  font-family: "Pacifico", sans-serif;
+  text-transform: none!important;
+}
+
+
+.style-1:before {
+  content: "";
+  height: 10px;
+  border-top: 3px solid white;
+  border-bottom: 1px solid white;
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  left: -100%;
+  z-index: -999;
+} 
+/*  이미지 서식  */
+    
+.image-center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%; /* 이미지의 폭을 조절합니다 (예: 전체 폭의 50%) */
+    height: auto; /* 이미지의 높이를 자동으로 조절합니다 */
+}
+/* 텍스트 서식 */
+.projection-description{
+    font-size: 30px;
+    color: #000;
+    text-align: right; /* 텍스트 정렬 */
+    margin: 10px 0; /* 상하 마진 */
+    margin-left: 20px;
+}
+.projection-description1{
+    font-size: 20px;
+    color: #fff;
+    text-align: left; /* 텍스트 정렬 */
+    margin: 10px 0; /* 상하 마진 */
+    
+}
+    </style>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -21,19 +86,26 @@
             </div>
         </div>
     </nav>
+    <section class="hero is-small is-primary">
+    <div class = "hero-head">
+    <p class="title">               
+    <div id="container"><h1 class="style-1">Gourmet in Jungle</h1></div>
+    </p>
+    </div>
+    </section>
+  
+  <section class="hero is-link is-fullheight-with-navbar">
+    <div class="hero-body">
+      <p class="title">
+        <img src="background1.png" alt="" class="image-center">
+        <img src="background2.png" alt="" class="image-center">
+      </p>
+      <p class = "projection-description"><b>정글러들을 위한 맛집 공유 프로젝트</b></p>
+      <p class = "projection-description1">-내가 갔던 맛집의 위치를 클릭해 리뷰를 남기고 정글러들과 공유 해보세요
+        <br>-정글러 친구들이 등록해 놓은 맛집을 방문해보고 나는 어땠는지 리뷰를 추가해보세요! </p>
 
-	<article class="message is-info">
-		<div class="message-header">
-		  <p>메인화면</p>
-		  <button class="delete" aria-label="delete"></button>
-		</div>
-		<div class="message-body">
-		  정글러들에게 공유하고 싶은 맛집을 등록해주세요!
-		  
-		  <input class="input is-primary" type="text" placeholder="Primary input">
-	  </div>
-	  </article>
-
+    </div>
+  </section>
 
 </body>
 </html>
