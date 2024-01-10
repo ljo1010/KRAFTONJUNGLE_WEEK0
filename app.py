@@ -175,6 +175,28 @@ def submit_review():
 
    return jsonify({'result': 'success'})
 
+#[리뷰 노출 API]
+@app.route('/api/getReviews', methods=['GET'])
+def fetch_reviews():
+    restaurant_name = request.args.get('restaurantName')
+
+    # MongoDB에서 해당 음식점의 리뷰를 가져옴
+    reviews_cursor = db.review.find({'placename': restaurant_name})
+    
+    # 리뷰가 배열로 저장되어 있다고 가정
+    reviews = []
+    for review_doc in reviews_cursor:
+        for review in review_doc.get('reviews', []):
+            reviews.append({
+                'comment': review.get('comment', ''),
+                'rating': review.get('rating', 0)
+            })
+
+    return jsonify(reviews)
+
+
+
+
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
