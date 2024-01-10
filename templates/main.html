@@ -133,12 +133,15 @@
         .info .link {
             color: #5085BB;
         }
+
+        .icon-large {
+            font-size: 24px; /* 아이콘 크기 조절 */
+            margin-right: 10px; /* 오른쪽 여백 추가 */
+}
     </style>
 </head>
 
 <body>
-
-
     <!-- Navigation Bar -->
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-menu">
@@ -151,9 +154,10 @@
                 <!-- 오른쪽 버튼 -->
                 <div class="navbar-end">
                     <div class="navbar-item">
+                        <i class="fa-regular fa-face-smile icon-large"></i>
                         <div class="buttons">
                             <a class="button is-light">
-                                <i class="fa-solid fa-face-smile"></i> {{ user_info.nickname }} 님
+                                {{ user_info.nickname }} 님
                             </a>
                             <a class="button is-primary" href="/">로그아웃</a>
                         </div>
@@ -162,13 +166,11 @@
             </div>
     </nav>
 
-
     <!-- Map Container -->
     <div id="map" style="width: 1200px; height: 600px;"></div>
 
     <!-- 음식점 정보를 표시할 부분 -->
     <div id="restaurant-info" style="width: 2400px;"></div>
-
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -365,11 +367,9 @@
                 '</article>' +
                 '</article>';
 
-
             $('#restaurant-info').append(reviewForm);
 
         }
-
 
         function submitReviewAndClose(placename) {
             // submitReview 함수 호출
