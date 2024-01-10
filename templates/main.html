@@ -12,7 +12,7 @@
     <script defer src="https://use.fontawesome.com/releases/v6.4.0/js/all.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.css') }}" />
 
-    <title>Document</title>
+
     <!-- 스타일 -->
     <style>
         @import url(https://fonts.googleapis.com/css?family=Oswald);
@@ -24,7 +24,7 @@
             font-size: 30px;
             margin-top: 10px;
             margin-left: 30px;
-            margin-right: 950px;
+            margin-right: 1100px;
             text-transform: none !important;
         }
 
@@ -140,7 +140,13 @@
             margin-right: 10px;
             /* 오른쪽 여백 추가 */
         }
+
+        .sorting {
+            display: flex;
+            flex-direction: row;
+        }
     </style>
+    <title>Gourmet in Jungle</title>
 </head>
 
 <body>
@@ -169,46 +175,27 @@
     </nav>
 
     <!-- Map Container -->
-    <div class="tile is-parent">
-        <div id="map" style="width: 1200px; height: 600px;"></div>
-
-        <article class="tile is-child notification is-success is-4">
-          <div class="content">
-            <p class="title">식당이름 <br>별점</p>
-            
+    <div class="sorting">
+        <div class="tile is-parent">
+            <div id="map" style="width: 1200px; height: 600px;"></div>
+        </div>
+        <article class="tile is-child notification is-primary is-3">
             <div class="content">
-                <div class="card"> 
-                    <div class="card-content">
-                        <div class="content">
-                               <!-- 아무거나 -->
-                               <div class="media-content">
-                                <p class="title is-4">식당이름 </p>
-                                <p>닉네임</p>
-                                <p class="title is-5">⭐⭐⭐⭐⭐</p>
-                               </div>
-                               
-                               <div class="content">
-                                식당코멘트
-                               </div>
-                                                        
-                        </div>
-                    </div>
-                  </div>
-    
+                <p class="title">정글러들의 "찐" 리뷰!</p>
+
+                <div id="reviews-list" class="content">
+
+                </div>
+
+
             </div>
-            </div>
-          </div>
         </article>
+    </div>
 
     <!-- 음식점 정보를 표시할 부분 -->
     <div id="restaurant-info" style="width: 2400px;"></div>
     <!-- 리뷰를 표시할 부분 -->
-    <div id="reviews-container">
-        <h2>등록된 리뷰입니다.</h2>
-        <ul id="reviews-list">
-            <!-- 여기에 리뷰 목록이 동적으로 추가됩니다. -->
-        </ul>
-    </div>
+
     <script type="text/javascript">
         $(document).ready(function () {
             // 카카오 맵 API 로드가 완료된 후에 initMap 함수 호출
@@ -467,6 +454,7 @@
             var reviewsList = $("#reviews-list");
             reviewsList.empty();
 
+
             if (reviews.length === 0) {
                 // 리뷰가 없는 경우 메시지 표시
                 var noReviewMessage = "<li>리뷰가 없습니다.</li>";
@@ -475,9 +463,17 @@
                 // 리뷰가 있는 경우 각 리뷰를 리스트에 추가
                 for (var i = 0; i < reviews.length; i++) {
                     var review = reviews[i];
-                    var listItem = `<li><strong>평점:</strong> ${review.rating}, <strong>코멘트:</strong> ${review.comment}</li>`;
+                    var listItem = ` <div class="content">
+                                        <div class="card">
+                                            <div class="card-content">
+                                                <div><strong>평점:</strong> ${review.rating}, <strong>코멘트:</strong> ${review.comment}</div>
+                                            </div>
+                                        </div>
+                                    </div>`;
                     reviewsList.append(listItem);
+
                 }
+
             }
         }
     </script>
