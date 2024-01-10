@@ -159,19 +159,47 @@
 function displayRestaurantData(data) {
     // TODO: 음식점 데이터를 사용하여 HTML에 표시하는 작업
 
-    // 예시: 평가 및 리뷰 폼을 추가
-    var reviewForm = '<h3>평가 및 리뷰</h3>' +
-        '<form id="review-form">' +
-        '<label for="rating-input">평점:</label>' +
-        '<input type="number" id="rating-input" name="rating" min="1" max="5" step="0.1" required>' +
-        '<br>' +
-        '<label for="comment-input">리뷰:</label>' +
-        '<textarea id="comment-input" name="comment" rows="4" required></textarea>' +
-        '<br>' +
-        '<button type="button" onclick="submitReview(\'' + data.place_name + '\')">평가 제출</button>' +
-        '</form>';
+    // 음식점 이름을 제목으로 설정
+    var title = '<h2 class="title">' + data.place_name + '</h2>';
 
-    $('#restaurant-info').append(reviewForm);
+    // 기존 리뷰 표시
+    var reviewsHtml = '<div><strong>리뷰:</strong></div>';
+    data.reviews.forEach(function(review) {
+        reviewsHtml += '<div><strong>' + review.author + ':</strong> ' + review.text + '</div>';
+    });
+
+    // 평균 평점 표시
+    var averageRatingHtml = '<div><strong>평균 평점:</strong> ' + data.averageRating + '</div>';
+
+    // 평가 및 리뷰 폼
+    var reviewForm = '<div class="media-content">' +
+        '<div class="select is-rounded">' +
+        '<select id="rating-input">' +
+        '<option value="5">⭐⭐⭐⭐⭐</option>' +
+        '<option value="4">⭐⭐⭐⭐</option>' +
+        '<option value="3">⭐⭐⭐</option>' +
+        '<option value="2">⭐⭐</option>' +
+        '<option value="1">⭐</option>' +
+        '</select>' +
+        '</div>' +
+        '<div class="field">' +
+        '<p class="control">' +
+        '<textarea class="textarea is-success is-small" id="comment-input" placeholder="음식점이 어땠는지 알려주세요"></textarea>' +
+        '</p>' +
+        '</div>' +
+        '<nav class="level">' +
+        '<div class="level-left">' +
+        '<div class="level-item">' +
+        '<a class="button is-primary" onclick="submitReview(\'' + data.place_name + '\')">Submit</a>' +
+        '<a class="button is-danger">Cancel</a>' +
+        '</div>' +
+        '</div>' +
+        '</nav>' +
+        '</div>';
+
+    // 음식점 정보와 리뷰 폼을 HTML에 추가
+    var restaurantInfoHtml = title + averageRatingHtml + reviewsHtml + reviewForm;
+    $('#restaurant-info').html(restaurantInfoHtml);
 }
 
 //평가 및 리뷰 데이터 저장
@@ -197,14 +225,11 @@ function submitReview(placename) {
 }
 
 
-   
-    </script>
+   </script>
     
-
-        <div class="pl-5">
-        <div class="tile is-vertical is-6 is-offset-8">
+        <div class="tile is-parent is-6">
             <div class="box">
-                <article class="tile is-child box">
+                <div class="tile is-childnotification is-success">
                   <div class="content">
                     <p class="title">정글러들의 리뷰</p>
                     <p class="subtitle">With even more content</p>
@@ -214,10 +239,11 @@ function submitReview(placename) {
                       <p>Integer sollicitudin, tortor a mattis commodo, velit urna rhoncus erat, vitae congue lectus dolor consequat libero. Donec leo ligula, maximus et pellentesque sed, gravida a metus. Cras ullamcorper a nunc ac porta. Aliquam ut aliquet lacus, quis faucibus libero. Quisque non semper leo.</p>
                     </div>
                   </div>
-                </article>
+                </div>
               </div>
         </div>
-    </div>
+ 
+        <!-- 코멘트를 쓰는 박스 만들기 -->
 
     <div class="tile is-parent">
         <article class="tile is-child notification is-info is-vertical is-6">
@@ -228,7 +254,6 @@ function submitReview(placename) {
     <article class="media">
 
         
-        <!-- 코멘트를 쓰는 박스 만들기 -->
        
         <div class="media-content">
           <div class="select is-rounded">
@@ -258,8 +283,9 @@ function submitReview(placename) {
             </div>
           </nav>
         </div>
+    </div>
       </article>
-          </div>
+           
 
           
 </body>
