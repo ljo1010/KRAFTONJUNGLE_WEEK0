@@ -153,6 +153,10 @@ def submit_review():
             {'placename': placename},
             {'$push': {'reviews': {'rating': rating, 'comment': comment}}}
         )
+        db.total.update_one(
+           {'placename':placename},
+           {'$inc':{'reviewcount':1}}
+        )
     else:
         # 음식점이 없는 경우, 새로운 도큐먼트 추가
         new_doc = {
