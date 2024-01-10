@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Login Page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.min.css') }}" />
+    <script defer src="https://use.fontawesome.com/releases/v6.4.0/js/all.js"></script>
 </head>
 <body>
     <div class="hero is-primary is-fullheight">
@@ -35,6 +35,9 @@
                         <label class="label">비밀번호</label>
                         <div class="control has-icons-left">
                             <input class="input" type="password" name="pw_give" placeholder="비밀번호 입력">
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-lock"></i>
+                            </span>
                         </div>
                     </div>
 
