@@ -9,17 +9,18 @@
     <script type="text/javascript"
         src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
     <!-- 카카오 맵 API 스크립트를 포함합니다. -->
-    <script type="text/javascript"
-        src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <title>Document</title>
+    <style>
+        
+    </style>
 </head>
 
 <body>
 
 
-    <!-- Navigation Bar -->
     <!-- Navigation Bar -->
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-menu">
@@ -34,62 +35,7 @@
         </div>
     </nav>
 
-    <!-- Map Container -->
-    <div id="map" style="width: 500px; height: 400px;"></div>
-
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            // 카카오 맵 API 로드가 완료된 후에 initMap 함수 호출
-            kakao.maps.load(initMap);
-        });
-
-        function initMap() {
-            var container = document.getElementById('map');
-            var options = {
-                center: new kakao.maps.LatLng(37.297875428836804, 127.03861803212595),
-                level: 3
-            };
-
-            var map = new kakao.maps.Map(container, options);
-
-            // createMarker 함수 호출
-            createMarker(map);
-        }
-
-
-        function createMarker(map) {
-            $.ajax({
-                type: "POST",
-                url: "/api/createMarker",
-                data: {},
-                success: function (response) {
-                    let datalist = response['data_list']
-
-                    for (let i = 0; i < datalist.length; i++) {
-                        let data = datalist[i]
-                        let placename = data['placename']
-                        let url = data['place_url']
-                        let lat = parseFloat(data['lat']);  // 문자열을 숫자로 변환
-                        let lng = parseFloat(data['lng']);  // 문자열을 숫자로 변환
-
-                        // 마커가 표시될 위치입니다 
-                        var markerPosition = new kakao.maps.LatLng(lng, lat);
-
-                        // 마커를 생성합니다
-                        var marker = new kakao.maps.Marker({
-                            position: markerPosition
-                        });
-
-                        // 마커가 지도 위에 표시되도록 설정합니다
-                        marker.setMap(map);
-
-                    }
-
-                }
-            })
-        }
-    </script>
+    
     <!-- Map Container -->
     <div id="map" style="width: 500px; height: 400px;"></div>
 
@@ -170,6 +116,69 @@
             };
         }
     </script>
+    
+
+        <div class="pl-5">
+        <div class="tile is-vertical is-6 is-offset-8">
+            <div class="box">
+                <article class="tile is-child box">
+                  <div class="content">
+                    <p class="title">정글러들의 리뷰</p>
+                    <p class="subtitle">With even more content</p>
+                    <div class="content">
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut. Morbi maximus, leo sit amet vehicula eleifend, nunc dui porta orci, quis semper odio felis ut quam.</p>
+                      <p>Suspendisse varius ligula in molestie lacinia. Maecenas varius eget ligula a sagittis. Pellentesque interdum, nisl nec interdum maximus, augue diam porttitor lorem, et sollicitudin felis neque sit amet erat. Maecenas imperdiet felis nisi, fringilla luctus felis hendrerit sit amet. Aenean vitae gravida diam, finibus dignissim turpis. Sed eget varius ligula, at volutpat tortor.</p>
+                      <p>Integer sollicitudin, tortor a mattis commodo, velit urna rhoncus erat, vitae congue lectus dolor consequat libero. Donec leo ligula, maximus et pellentesque sed, gravida a metus. Cras ullamcorper a nunc ac porta. Aliquam ut aliquet lacus, quis faucibus libero. Quisque non semper leo.</p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+        </div>
+    </div>
+
+    <div class="tile is-parent">
+        <article class="tile is-child notification is-info is-vertical is-6">
+          <p class="title"> 음식점 이름</p>
+          <p class="subtitle"></p>
+          <div class="content">
+
+    <article class="media">
+
+        
+        <!-- 코멘트를 쓰는 박스 만들기 -->
+       
+        <div class="media-content">
+          <div class="select is-rounded">
+            <select>
+              <option>⭐⭐⭐⭐⭐</option>
+              <option>⭐⭐⭐⭐ </option>
+              <option>⭐⭐⭐  </option>
+              <option>⭐⭐   </option>
+              <option>⭐    </option>
+            </select>
+          </div>
+          <div class="field">
+            <p class="control">
+              <textarea class="textarea is-sucess is-small" placeholder="음식점이 어땠는지 알려주세요"></textarea>
+            </p>
+          </div>
+          <nav class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <a class="button is-primary">Submit</a>
+                <a class="button is-danger">Cancel</a>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+              </div>
+            </div>
+          </nav>
+        </div>
+      </article>
+          </div>
+
+          
 </body>
 
 </html>
