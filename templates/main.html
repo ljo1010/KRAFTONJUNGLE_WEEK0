@@ -14,6 +14,113 @@
 
     <title>Document</title>
     <style>
+      
+        .wrap {
+            position: absolute;
+            left: 0;
+            bottom: 40px;
+            width: 288px;
+            height: 132px;
+            margin-left: -144px;
+            text-align: left;
+            overflow: hidden;
+            font-size: 12px;
+            font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+            line-height: 1.5;
+        }
+
+        .wrap * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .wrap .info {
+            width: 286px;
+            height: 120px;
+            border-radius: 5px;
+            border-bottom: 2px solid #ccc;
+            border-right: 1px solid #ccc;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .wrap .info:nth-child(1) {
+            border: 0;
+            box-shadow: 0px 1px 2px #888;
+        }
+
+        .info .title {
+            padding: 5px 0 0 10px;
+            height: 30px;
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .info .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #888;
+            width: 17px;
+            height: 17px;
+            background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');
+        }
+
+        .info .close:hover {
+            cursor: pointer;
+        }
+
+        .info .body {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info .desc {
+            position: relative;
+            margin: 13px 0 0 90px;
+            height: 75px;
+        }
+
+        .desc .ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .desc .jibun {
+            font-size: 11px;
+            color: #888;
+            margin-top: -2px;
+        }
+
+        .info .img {
+            position: absolute;
+            top: 6px;
+            left: 5px;
+            width: 73px;
+            height: 71px;
+            border: 1px solid #ddd;
+            color: #888;
+            overflow: hidden;
+        }
+
+        .info:after {
+            content: '';
+            position: absolute;
+            margin-left: -12px;
+            left: 50%;
+            bottom: 0;
+            width: 22px;
+            height: 12px;
+            background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
+        }
+
+        .info .link {
+            color: #5085BB;
+        }
+
     @import url(https://fonts.googleapis.com/css?family=Oswald);
     @import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
     @import url(https://fonts.googleapis.com/css?family=Pacifico);
@@ -26,6 +133,7 @@
     margin-right: 1000px;
     text-transform: none!important;
 }
+
     </style>
 </head>
 
@@ -56,10 +164,10 @@
 
 
     <!-- Map Container -->
-    <div id="map" style="width: 500px; height: 400px;"></div>
+    <div id="map" style="width: 1200px; height: 600px;"></div>
 
     <!-- 음식점 정보를 표시할 부분 -->
-    <div id="restaurant-info"></div>
+    <div id="restaurant-info" style="width: 2400px;"></div>
 
 
     <script type="text/javascript">
@@ -98,6 +206,7 @@
                         let lat = parseFloat(data['lat']);
                         let lng = parseFloat(data['lng']);
                         let reviewcount = data['reviewcount'];
+                        let address = data['road_addresss_name'];
 
                         // 마커가 표시될 위치입니다 
                         var markerPosition = new kakao.maps.LatLng(lng, lat);
@@ -115,7 +224,24 @@
                         marker.setMap(map);
 
                         // 커스텀 오버레이 생성
-                        var content = '<div style="padding:5px;font-size:12px;">' + placename + '<br><a href="' + url + '" target="_blank">상세정보 보기</a></div>';
+                        var content =
+                            '<div class="wrap">' +
+                            '<div class="info">' +
+                            '<div class="title">' + placename +
+                            '<div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+                            '        </div>' +
+                            '        <div class="body">' +
+                            '            <div class="img">' +
+                            '                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAC3CAMAAAAGjUrGAAAAkFBMVEX///8G0YIAz3sA0H8A0H4Az3n//f8AznfS9eT9///E8dxY2ZwA0oG17dMa04jp+/Qs1ZBz4q7f+u5j3af0/fuj58i879eM5bie6MZI2ZlQ26Ad1oyQ5sIAzXPO9OKB47jv/Pc92JfX9enh+fS58daV5sCu7tF14bAcz4h/5bmq6sn0+/yU5r1i3apS3JtS3qUDIrvnAAAKcklEQVR4nO2bC3eiPBCGk0kChkVAoRbxhvZTtvf//+++mYAaL+12e2rrOTvP7jmrJETyMrcEVgiGYRiGYRiGYRiGYRiGYRiGYRiGYRiGYRiGYRiGYRiGYRiGYRiGYRiGYRiGYRiGYRiGYZh/ln6SPT6Ok6kIbiZZlr0W1grxOM4mK2qd0rGkFD36N5vcCNGjDysR3CWT/8Tz7+anr/8SzE0iRmGCQoyMBIAxfhJ1okxEraWJAWZrMZ9BHGv8MNQatJKpEAC/xCK8/eHL/wP2U2dFkIklbPDTKMzmfa0Kd1DCglofwipCxLAfSbWJ5iIyy2g+CXvCGqnT22vTZPPyy6f83CioST9cksOMwqWoQZImt5DpJWn8EA62HaUeUvdwLERmnCamnF6TJlYUDagDTF5/ZqQIkt+tn4xmqIkhTew43IAkCR7C5X3Tdx0ldJpYMWk1UcsFXI8mVqwykArMDnRySKJP+E8EsdStJuHkZgqqFiKNTZEZkuIh1OHswXU80STJVKavR5Og1FrCuO+Rg5SfseQIJrkek5gjUChtE1jyovreUEpBO5neblzHU01Kpa7ETvDq68rIuA2Ce0qNx8bDv421GE+GACNBeef3WLkocq91qFWGXvQwa0Q34k4TjCdtjO1l6krsxIrot441OkpwOHtyJy03fzkc2onIASdK1pEanQprM401iNPgYfa87bjVJNv0u7yTTuFaNFlopV1APTaIehBKZZrH86c5To9TfTKH2UgEo1kmxrMnIYZhnBZFNcNMdhPm247aaZImJgxhUlsR6ruh2RvrG8N/C+lS4cRvzjUFYqOUhKz3N+ONXl6LYvDr2WJufxVllddB/yVHt7mtcL7luOkmWlfV3AX3PH/NU6xjq6onmmrx/ujfgA2GWETC5O6tDukSZGyi4LSlF8Zx3CbdS4AFb6yznzGUBaZgvHVnJk2uhH8XWqrBmdaekVLCpTSxlcLRpxca/Q9MpDn/y/ami643aCln7tdlNRni4FKtLjT6+6wwCZ/+MkqwqmbD9nORyHMucllNsBCQbR7/fqZaLU+PBnahdNJekRXPWp9xnotqYsc0+NNlBv/DT4ul1OvT4/MMYr3bydiA0qd9PE1c2txHJHuQpttP9XBYnL2EIk0LcVIGDMFzHWorCuvG+uDEPg8mwljK1fEFpQ0uWSTsirVUnnMeT5NXAxB6tV2K30HW26/BKFchMrkdHo2xaiQeN5On44aSNMm6L4+bSoYzM7n/jvBixRp0dnRI9BO6IIkF6JZcqdPtr50mVuTo/NDfN6X4XSZFN+BqaTCHSJRZw8J69zp9pt0kbFGg7g+tCGsmqbvNis0ElIu4Gp5TcXHsWOmjrDOsnCJSZ/urxHV+cmK1np28p4l4ULHcEpvxflZRoncNUmV+ieRcx5W5wg7Mvhet1C/NEOu1A4Ms1tsL1Z5lpIlU8+NzP6SJFX2QPnpZuy5W9GRnPZ0oSb0fYE1ZJ3M+TWPLWKMzKmcr8+DCMWWNBnAQTZrdrduHE+xQKbg/PvdjdnKnadYxYMo3bmzo1juY4d1Xg5ke3LTH+wEmpN6aroxyslSwvF0PZKtu/XXTP4d9idF1PE2KRCXb++qHvY1R2ePR/fmYJhV9hN99XEfeNS4shK35D6gBV920U7FW9AXXXN1PDEPUaJZuR9JZa8tPbqwLb+zfaWUO1ncrCO+myhlp5gc9zDxw7Dwf0qQXUqeqwLUDzjciV2nrodQ50rgWbYGYUEO2XYA713HdcOUhtTudiDA0KXmco74WjJ3S+2rJUq2IMu3CiW8XmTpZe3xIE2cayU7em13sdMlW7uJq5ExgK3tGpQBlnccJRRzXy6bzp9x52/qTDxQ+xsrE4GU3TKoqx1tSD+Bgis753c6Zzwc0sRQYYvAeAExoZXfTnWI8v3VDdLL3XMFGyq0oJS/QmUb3YwldSn75krm/hcXb72+cPCbd9TdwaKEjI/200F75RzShPqE31EK3k7RUgPh+Sxakuy24W3KditwlwqOqaTLZFjJUokD8fL4g/ioWKl56lrgy7dZXrsDfuUD7AZ0fn3tUsxm/jt16TEF9TLEfiFyGsvwjuYf2xKLZd78RUJtxN8clcqWpwsFIApDkNxevZVcgjVcrlQYja1BKUOODn66T+HSx52nyTHbysG+6w6nEqElQuBDryUvmALigLMhO/NJos7eTnt5V0VGXBBVouWxGb+58fSXFMtbeXCrTYCUeGnlzuCgbwanriJHe+c7iKCijq8kY1wznNXGLbNoywuS7WzhSYdTtxdJo6pf76OSRelI9RU6j4NzW11ez0GpfKlkF5VRrGKRHkb3R6sR1ApdS2qUr3WSZ7KJ1QBMmR3hHkye3yHvcztGlZuPC+GO2jcNkoHQ8qrenR+taXJw5XtpuLhjvE6wrT7yEsk7/8BBm7LaKcZVcSrUqWr5tm1zGpad+72iygq7+CtxzWVJRTuruKvZZOid1dyV0PYFkcfFloE2oiO/mUiqpw8VpVI+MFye788rW0e/bc5+dH+Wu5grWoWsS72oiKtLRVG7uqyVFUbV1HQynVedVPeUtvVK0oNhcft/6HvD3O8baLM/tQzYxvO6+Vu5dGtMGP9XetGDo1nIqbjababs4MKT0e5qsXKhQZnnfZO3yri3trCthdkmMntDiEmA9H0aLkNJPeLIY/XI853kEWYrTDXxrJ77rLDW9c9CuZ01XjaG76C4/dGIB1X7vaYKnGDdGDLo9t6ti52avNY2QuSxED/eBftR8w/Mf291SJPp1PtdhQtR711nKHeFgH4sXB1sCUNV08D07cYtyD92FMZd1vFI1zbxdFmm+5dWuRm8fCadnHJXeDki2mdGx3O54aFgEu01YCkbba481NJ2GrmZ7QxOLI8N+vtsFenKw7UljDLpeMZrnJ98T+ksi9FLzdrls7wHbvRomc76jYbacH2bsYYMFOP7BoBR1HmiLGQDMvMFLPLB/U6kuJzPTle0ydEXRPMTxw4Mn1MH82YSAVay8fM7pGEmIITn7SDgQd/Rqgd7XVhhwq6p6fW1uzryDUfcX+UGLteuyLNdevx5+L/3VZBptytxFlBjuyNxecPiT/Ss7729GK/HZV+z+npR2YM890aC9VCXP5aI3+GyVmb5CW+B8eoQvxroNrASq9PhwkUOszOL03rz1EsQbx/98cwNaRcaUAO2H+n8HcywKdHK0Q0J7S1qOvuHe2SA9Ca0/T52H9PLW0GOKwc5U3xXVGn34qOAq2KAE2nsTVAMWmd/3rkPf7PZPrghKMeqg8DqfjC7DiHbUrk0Ti6VIcsCguHQo8YLp1Nt7vCrSAy78Y0U02K9dgvEPvpZ0LdRNpkH32twbtLtS+ht99RpJ3e7zNmL12w2qK6nYfgy3kFbh/byoo9xtG5j/fvqafhr3NIOyW/fGwO7h+r+LFUOpDzL/D70Le12sJt6mkml3of55ioUxrdsYWbKVdNTlWGqVVJviX085h/zYf75gGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZhGOZr+R+ht5CFjhBDSwAAAABJRU5ErkJggg==" width="73" height="70">' +
+                            '           </div>' +
+                            '            <div class="desc">' +
+                            '                <div class="ellipsis">' + address + '</div>' +
+                            '                <div class="jibun ellipsis">정글러들의 리뷰가 필요합니다!</div>' +
+                            '                <div><a href="' + url + '" target="_blank" class="link">홈페이지</a></div>' +
+                            '            </div>' +
+                            '        </div>' +
+                            '    </div>' +
+                            '</div>';
                         var customOverlay = new kakao.maps.CustomOverlay({
                             position: markerPosition,
                             content: content,
@@ -124,10 +250,20 @@
                         });
 
                         // 마커 클릭 이벤트 등록
-                        kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, customOverlay,placename));
+                        kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, customOverlay, placename));
                     }
                 }
             });
+        }
+
+        // 전역 변수로 현재 열린 커스텀 오버레이를 저장할 변수 추가
+        var openCustomOverlay;
+
+        // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
+        function closeOverlay() {
+            if (openCustomOverlay) {
+                openCustomOverlay.setMap(null);
+            }
         }
 
         // 리뷰 카운트에 따라 마커 이미지 선택하는 함수
@@ -146,8 +282,11 @@
         }
 
         // 클릭 이벤트 생성 함수
-        function makeClickListener(map, marker, customOverlay,placename) {
+        function makeClickListener(map, marker, customOverlay, placename) {
             return function () {
+
+                // 이전에 열린 폼을 닫는 함수 호출
+                closePreviousForm();
                 // 클릭한 마커에 연결된 커스텀 오버레이를 지도 위에 표시합니다
                 if (openCustomOverlay) {
                     openCustomOverlay.setMap(null);
@@ -155,158 +294,106 @@
                 customOverlay.setMap(map);
                 openCustomOverlay = customOverlay;
 
-                 // 클라이언트에서 음식점 ID를 서버에 전달하고 음식점 정보 가져오기
-        getRestaurantDataFromServer(placename);
+                // 클라이언트에서 음식점 ID를 서버에 전달하고 음식점 정보 가져오기
+                getRestaurantDataFromServer(placename);
 
 
             };
         }
 
+        // 이전에 열린 폼을 닫는 함수
+        function closePreviousForm() {
+            // 여기에 이전에 열린 폼을 닫는 로직 추가
+            $('#restaurant-info').empty(); // 예시로 폼을 간단히 비우는 코드를 작성했습니다.
+        }
+
         function getRestaurantDataFromServer(placename) {
-    $.ajax({
-        type: "POST",
-        url: "/api/getRestaurantData",
-        data: JSON.stringify({ place_name: placename }),
-        contentType: "application/json; charset=utf-8",
-        success: function (response) {
-            // 서버로부터 받은 음식점 데이터 처리
-            displayRestaurantData(response);
+            $.ajax({
+                type: "POST",
+                url: "/api/getRestaurantData",
+                data: JSON.stringify({ place_name: placename }),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    // 서버로부터 받은 음식점 데이터 처리
+                    displayRestaurantData(response);
+                }
+            });
         }
-    });
-}
 
-function displayRestaurantData(data) {
-    // TODO: 음식점 데이터를 사용하여 HTML에 표시하는 작업
+        function displayRestaurantData(data) {
+            // TODO: 음식점 데이터를 사용하여 HTML에 표시하는 작업
 
-    // 음식점 이름을 제목으로 설정
-    var title = '<h2 class="title">' + data.place_name + '</h2>';
+            // 예시: 평가 및 리뷰 폼을 추가
+            var reviewForm =
+                '<article class="tile is-parent">' +
+                '<article class="tile is-child notification is-info is-vertical is-6">' +
+                '<p class="title">' + data.place_name + '</p>' +
+                '<p class="subtitle"></p>' +
+                '<div class="content">' +
+                '<article class="media">' +
+                '<div class="media-content">' +
+                '<div class="select is-rounded">' +
+                '<select id="rating-input">' +
+                '<option>⭐⭐⭐⭐⭐</option>' +
+                '<option>⭐⭐⭐⭐</option>' +
+                '<option>⭐⭐⭐</option>' +
+                '<option>⭐⭐</option>' +
+                '<option>⭐</option>' +
+                '</select>' +
+                '</div>' +
+                '<div class="field">' +
+                '<p class="control">' +
+                '<textarea id="comment-input" class="textarea is-success is-medium" placeholder="음식점이 어땠는지 알려주세요"></textarea>' +
+                '</p>' +
+                '</div>' +
+                '<nav class="level">' +
+                '<div class="level-left">' +
+                '<div class="level-item">' +
+                '<a class="button is-primary" onclick="submitReview(\'' + data.place_name + '\')">Submit</a>' +
+                '<a class="button is-danger">Cancel</a>' +
+                '</div>' +
+                '</div>' +
+                '<div class="level-right">' +
+                '<div class="level-item">' +
+                '</div>' +
+                '</div>' +
+                '</nav>' +
+                '</div>' +
+                '</div>' +
+                '</article>' +
+                '</div>' +
+                '</article>' +
+                '</article>';
 
-    // 기존 리뷰 표시
-    var reviewsHtml = '<div><strong>리뷰:</strong></div>';
-    data.reviews.forEach(function(review) {
-        reviewsHtml += '<div><strong>' + review.author + ':</strong> ' + review.text + '</div>';
-    });
 
-    // 평균 평점 표시
-    var averageRatingHtml = '<div><strong>평균 평점:</strong> ' + data.averageRating + '</div>';
+            $('#restaurant-info').append(reviewForm);
 
-    // 평가 및 리뷰 폼
-    var reviewForm = '<div class="media-content">' +
-        '<div class="select is-rounded">' +
-        '<select id="rating-input">' +
-        '<option value="5">⭐⭐⭐⭐⭐</option>' +
-        '<option value="4">⭐⭐⭐⭐</option>' +
-        '<option value="3">⭐⭐⭐</option>' +
-        '<option value="2">⭐⭐</option>' +
-        '<option value="1">⭐</option>' +
-        '</select>' +
-        '</div>' +
-        '<div class="field">' +
-        '<p class="control">' +
-        '<textarea class="textarea is-success is-small" id="comment-input" placeholder="음식점이 어땠는지 알려주세요"></textarea>' +
-        '</p>' +
-        '</div>' +
-        '<nav class="level">' +
-        '<div class="level-left">' +
-        '<div class="level-item">' +
-        '<a class="button is-primary" onclick="submitReview(\'' + data.place_name + '\')">Submit</a>' +
-        '<a class="button is-danger">Cancel</a>' +
-        '</div>' +
-        '</div>' +
-        '</nav>' +
-        '</div>';
-
-    // 음식점 정보와 리뷰 폼을 HTML에 추가
-    var restaurantInfoHtml = title + averageRatingHtml + reviewsHtml + reviewForm;
-    $('#restaurant-info').html(restaurantInfoHtml);
-}
-
-//평가 및 리뷰 데이터 저장
-function submitReview(placename) {
-    var rating = $('#rating-input').val();
-    var comment = $('#comment-input').val();
-
-    // 클라이언트에서 서버로 평가 및 리뷰 데이터 전송
-    $.ajax({
-        type: "POST",
-        url: "/api/submitReview",
-        data: JSON.stringify({
-            place_name: placename,
-            rating: rating,
-            comment: comment
-        }),
-        contentType: "application/json; charset=utf-8",
-        success: function (response) {
-            // 성공적으로 전송된 경우, 사용자에게 알림 또는 다른 작업 수행
-            console.log("평가 및 리뷰가 성공적으로 저장되었습니다.");
         }
-    });
-}
+
+        //평가 및 리뷰 데이터 저장
+        function submitReview(placename) {
+            var rating = $('#rating-input').val();
+            var comment = $('#comment-input').val();
+
+            // 클라이언트에서 서버로 평가 및 리뷰 데이터 전송
+            $.ajax({
+                type: "POST",
+                url: "/api/submitReview",
+                data: JSON.stringify({
+                    place_name: placename,
+                    rating: rating,
+                    comment: comment
+                }),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    // 성공적으로 전송된 경우, 사용자에게 알림 또는 다른 작업 수행
+                    console.log("평가 및 리뷰가 성공적으로 저장되었습니다.");
+                }
+            });
+        }
 
 
-   </script>
-    
-        <div class="tile is-parent is-6">
-            <div class="box">
-                <div class="tile is-childnotification is-success">
-                  <div class="content">
-                    <p class="title">정글러들의 리뷰</p>
-                    <p class="subtitle">With even more content</p>
-                    <div class="content">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut. Morbi maximus, leo sit amet vehicula eleifend, nunc dui porta orci, quis semper odio felis ut quam.</p>
-                      <p>Suspendisse varius ligula in molestie lacinia. Maecenas varius eget ligula a sagittis. Pellentesque interdum, nisl nec interdum maximus, augue diam porttitor lorem, et sollicitudin felis neque sit amet erat. Maecenas imperdiet felis nisi, fringilla luctus felis hendrerit sit amet. Aenean vitae gravida diam, finibus dignissim turpis. Sed eget varius ligula, at volutpat tortor.</p>
-                      <p>Integer sollicitudin, tortor a mattis commodo, velit urna rhoncus erat, vitae congue lectus dolor consequat libero. Donec leo ligula, maximus et pellentesque sed, gravida a metus. Cras ullamcorper a nunc ac porta. Aliquam ut aliquet lacus, quis faucibus libero. Quisque non semper leo.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-        </div>
- 
-        <!-- 코멘트를 쓰는 박스 만들기 -->
-
-    <div class="tile is-parent">
-        <article class="tile is-child notification is-info is-vertical is-6">
-          <p class="title"> 음식점 이름</p>
-          <p class="subtitle"></p>
-          <div class="content">
-
-    <article class="media">
-
-        
-       
-        <div class="media-content">
-          <div class="select is-rounded">
-            <select>
-              <option>⭐⭐⭐⭐⭐</option>
-              <option>⭐⭐⭐⭐ </option>
-              <option>⭐⭐⭐  </option>
-              <option>⭐⭐   </option>
-              <option>⭐    </option>
-            </select>
-          </div>
-          <div class="field">
-            <p class="control">
-              <textarea class="textarea is-sucess is-small" placeholder="음식점이 어땠는지 알려주세요"></textarea>
-            </p>
-          </div>
-          <nav class="level">
-            <div class="level-left">
-              <div class="level-item">
-                <a class="button is-primary">Submit</a>
-                <a class="button is-danger">Cancel</a>
-              </div>
-            </div>
-            <div class="level-right">
-              <div class="level-item">
-              </div>
-            </div>
-          </nav>
-        </div>
-    </div>
-      </article>
-           
-
-          
+    </script>
 </body>
 
 </html>
