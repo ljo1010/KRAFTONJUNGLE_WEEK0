@@ -9,12 +9,25 @@
     <script type="text/javascript"
         src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v6.4.0/js/all.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.css') }}" />
 
     <title>Document</title>
+    <!-- 스타일 -->
     <style>
-      
+        @import url(https://fonts.googleapis.com/css?family=Oswald);
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
+        @import url(https://fonts.googleapis.com/css?family=Pacifico);
+
+        .title-nav {
+            font-family: "Pacifico", sans-serif;
+            font-size: 30px;
+            margin-top: 10px;
+            margin-left: 30px;
+            margin-right: 950px;
+            text-transform: none !important;
+        }
+
         .wrap {
             position: absolute;
             left: 0;
@@ -120,20 +133,6 @@
         .info .link {
             color: #5085BB;
         }
-
-    @import url(https://fonts.googleapis.com/css?family=Oswald);
-    @import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
-    @import url(https://fonts.googleapis.com/css?family=Pacifico);
-
-.title-nav{
-    font-family: "Pacifico", sans-serif;
-    font-size: 30px;
-    margin-top: 10px;
-    margin-left: 30px;
-    margin-right: 1000px;
-    text-transform: none!important;
-}
-
     </style>
 </head>
 
@@ -147,20 +146,21 @@
             <div class="navbar-start">
                 <div class="navbar-item">
                     <a class="navbar-item title-nav" href="/">Gourmet in Jungle</a>
-            </div>
-    
-            <!-- 오른쪽 버튼 -->
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a class="button is-light">님</a>
-                        <a class="button is-primary" href="/">로그아웃</a>
+                </div>
+
+                <!-- 오른쪽 버튼 -->
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-light">
+                                <i class="fa-solid fa-face-smile"></i> {{ user_info.nickname }} 님
+                            </a>
+                            <a class="button is-primary" href="/">로그아웃</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </nav>
-    
 
 
     <!-- Map Container -->
