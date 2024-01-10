@@ -94,8 +94,56 @@ def api_login():
 # [마커 생성 API]
 @app.route('/api/createMarker',methods=['POST'])
 def create_marker():
-   data = list(db.total.find({}, {'_id': 0}))  # _id 필드를 제외하고 데이터 조회
+   data = list(db.total.find({}, {'_id': 0}))
    return jsonify({'result': 'success','data_list':data})
- 
+
+
+# [ 음식점 ID 받아서 정보넘겨 주기 API]
+@app.route('/api/getRestaurantData', methods=['POST'])
+def get_restaurant_data():
+    # 클라이언트로부터 음식점 ID 받기
+    place_name = request.json.get('place_name')
+
+    # TODO: 음식점 ID를 사용하여 데이터베이스에서 음식점 정보 가져오기
+    restaurant_data = db.total.find_one({'placename': place_name})
+
+    # 응답 데이터 생성 및 전송
+    response_data = {
+        'place_name': place_name,
+        'reviewcount': restaurant_data.get('reviewcount', 0)
+    }
+
+    return jsonify(response_data)
+
+
+# [클라이언트로 받은 리뷰,별점 데이터에 저장]
+@app.route('/api/submitReview', methods=['POST'])
+def submit_review():
+    # 클라이언트로부터 음식점 이름, 평점, 코멘트 받기
+    data = request.json
+    placename = data.get('place_name')
+    rating = data.get('rating')
+    comment = data.get('comment')
+
+    # 음식점이 존재하는지 확인
+    existing_doc = db.review.find_one({'placename': placename})
+
+    if existing_doc:
+        # 음식점이 이미 존재하는 경우, 리뷰 추가
+        db.review.update_one(
+            {'placename': placename},
+            {'$push': {'reviews': {'rating': rating, 'comment': comment}}}
+        )
+    else:
+        # 음식점이 없는 경우, 새로운 도큐먼트 추가
+        new_doc = {
+            'placename': placename,
+            'reviews': [{'rating': rating, 'comment': comment}]
+        }
+        db.review.insert_one(new_doc)
+
+    return jsonify({'result': 'success'})
+
+
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
