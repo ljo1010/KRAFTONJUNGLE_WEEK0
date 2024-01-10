@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>크래프톤 정글 TEAM5 | Gourmet in Jungle</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.css') }}" />
+
     <!-- 카카오 맵 API 스크립트를 포함합니다. -->
     <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -14,6 +15,8 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
 
 @import url(https://fonts.googleapis.com/css?family=Pacifico);
+
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 
 body {
   background-color: #fff;
@@ -65,16 +68,15 @@ body {
 }
 /* 텍스트 서식 */
 .projection-description{
-    font-size: 30px;
+    font-size: 40px;
     color: #000;
-    text-align: right; /* 텍스트 정렬 */
-    margin: 10px 0; /* 상하 마진 */
-    margin-left: 20px;
-    writing-mode: vertical-lr;
+    text-align: left; /* 텍스트 정렬 */
+    margin: 20px 0; /* 상하 마진 */
+    margin-left: 0px;
 
 }
 .projection-description1{
-    font-size: 20px;
+    font-size: 30px;
     color: #fff;
     text-align: left; /* 텍스트 정렬 */
     margin: 10px 0; /* 상하 마진 */
@@ -107,9 +109,9 @@ body {
   <section class="hero is-link is-fullheight-with-navbar">
     <div class="hero-body">
       <p class="title">
-        <img src="{{ url_for('static', filename='img/background1.png') }}" class="image-center">
+        <img src="{{ url_for('static', filename='background1.png') }}" class="image-center">
       </p>
-      <p class = "projection-description"><b>정글러들을 위한 <br>맛집 공유 프로젝트</b></p>
+     <div> <p class = "projection-description">정글러들을 위한 맛집 공유 프로젝트</p>
       <p class = "projection-description1">-내가 갔던 맛집의 위치를 클릭해 리뷰를 남기고 정글러들과 공유 해보세요
         <br>-정글러 친구들이 등록해 놓은 맛집을 방문해보고 나는 어땠는지 리뷰를 추가해보세요! </p>
 
