@@ -109,6 +109,12 @@ def api_login():
       # 로그인 실패, 로그인 페이지에 에러 메시지와 함께 렌더링
       return render_template('login.html', msg='아이디/비밀번호가 일치하지 않습니다.')
    
+@app.route('/logout')
+def logout():
+   response = make_response(redirect(url_for('login')))
+   response.delete_cookie('mytoken')  # JWT 토큰 쿠키를 삭제합니다.
+   return response
+
 
 # [마커 생성 API]
 @app.route('/api/createMarker',methods=['POST'])
