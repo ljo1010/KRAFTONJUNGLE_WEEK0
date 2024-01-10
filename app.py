@@ -109,6 +109,12 @@ def api_login():
       # 로그인 실패, 로그인 페이지에 에러 메시지와 함께 렌더링
       return render_template('login.html', msg='아이디/비밀번호가 일치하지 않습니다.')
    
+@app.route('/logout')
+def logout():
+   response = make_response(redirect(url_for('login')))
+   response.delete_cookie('mytoken')  # JWT 토큰 쿠키를 삭제합니다.
+   return response
+
 
 # [마커 생성 API]
 @app.route('/api/createMarker',methods=['POST'])
@@ -138,34 +144,58 @@ def get_restaurant_data():
 # [클라이언트로 받은 리뷰,별점 데이터에 저장]
 @app.route('/api/submitReview', methods=['POST'])
 def submit_review():
-    # 클라이언트로부터 음식점 이름, 평점, 코멘트 받기
-    data = request.json
-    placename = data.get('place_name')
-    rating = data.get('rating')
-    comment = data.get('comment')
+   # 클라이언트로부터 음식점 이름, 평점, 코멘트 받기
+   data = request.json
+   placename = data.get('place_name')
+   rating = data.get('rating')
+   comment = data.get('comment')
 
-    # 음식점이 존재하는지 확인
-    existing_doc = db.review.find_one({'placename': placename})
+   # 음식점이 존재하는지 확인
+   existing_doc = db.review.find_one({'placename': placename})
 
-    if existing_doc:
-        # 음식점이 이미 존재하는 경우, 리뷰 추가
-        db.review.update_one(
+   if existing_doc:
+      # 음식점이 이미 존재하는 경우, 리뷰 추가
+      db.review.update_one(
             {'placename': placename},
-            {'$push': {'reviews': {'rating': rating, 'comment': comment}}}
-        )
-        db.total.update_one(
-           {'placename':placename},
-           {'$inc':{'reviewcount':1}}
-        )
-    else:
-        # 음식점이 없는 경우, 새로운 도큐먼트 추가
-        new_doc = {
+            {'$push': {'reviews': {'rating': rating, 'comment':
+               
+               comment}}}
+      )
+      db.total.update_one(
+         {'placename':placename},
+         {'$inc':{'reviewcount':1}}
+      )
+   else:
+      # 음식점이 없는 경우, 새로운 도큐먼트 추가
+      new_doc = {
             'placename': placename,
             'reviews': [{'rating': rating, 'comment': comment}]
-        }
-        db.review.insert_one(new_doc)
+      }
+      db.review.insert_one(new_doc)
 
-    return jsonify({'result': 'success'})
+   return jsonify({'result': 'success'})
+
+#[리뷰 노출 API]
+@app.route('/api/getReviews', methods=['GET'])
+def fetch_reviews():
+    restaurant_name = request.args.get('restaurantName')
+
+    # MongoDB에서 해당 음식점의 리뷰를 가져옴
+    reviews_cursor = db.review.find({'placename': restaurant_name})
+    
+    # 리뷰가 배열로 저장되어 있다고 가정
+    reviews = []
+    for review_doc in reviews_cursor:
+        for review in review_doc.get('reviews', []):
+            reviews.append({
+                'comment': review.get('comment', ''),
+                'rating': review.get('rating', 0)
+            })
+
+    return jsonify(reviews)
+
+
+
 
 
 if __name__ == '__main__':
