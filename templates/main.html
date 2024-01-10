@@ -9,9 +9,9 @@
     <script type="text/javascript"
         src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
-    <!-- 카카오 맵 API 스크립트를 포함합니다. -->
     <title>Document</title>
     <style>
         
@@ -35,9 +35,12 @@
         </div>
     </nav>
 
-    
+
     <!-- Map Container -->
     <div id="map" style="width: 500px; height: 400px;"></div>
+
+    <!-- 음식점 정보를 표시할 부분 -->
+    <div id="restaurant-info"></div>
 
 
     <script type="text/javascript">
@@ -61,7 +64,6 @@
             createMarker(map);
         }
 
-
         function createMarker(map) {
             $.ajax({
                 type: "POST",
@@ -76,13 +78,18 @@
                         let url = data['place_url'];
                         let lat = parseFloat(data['lat']);
                         let lng = parseFloat(data['lng']);
+                        let reviewcount = data['reviewcount'];
 
                         // 마커가 표시될 위치입니다 
                         var markerPosition = new kakao.maps.LatLng(lng, lat);
 
+                        // 마커 이미지 선택
+                        var markerImage = chooseMarkerImage(reviewcount);
+
                         // 마커를 생성합니다
                         var marker = new kakao.maps.Marker({
-                            position: markerPosition
+                            position: markerPosition,
+                            image: markerImage
                         });
 
                         // 마커가 지도 위에 표시되도록 설정합니다
@@ -98,14 +105,29 @@
                         });
 
                         // 마커 클릭 이벤트 등록
-                        kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, customOverlay));
+                        kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, customOverlay,placename));
                     }
                 }
             });
         }
 
+        // 리뷰 카운트에 따라 마커 이미지 선택하는 함수
+        function chooseMarkerImage(reviewcount) {
+            if (reviewcount >= 1 && reviewcount < 5) {
+                // 리뷰 등록 이미지
+                return new kakao.maps.MarkerImage('https://cdn1.iconfinder.com/data/icons/color-bold-style/21/14_1-128.png', new kakao.maps.Size(40, 47));
+            }
+            else if (reviewcount >= 5) {
+                return new kakao.maps.MarkerImage('https://cdn1.iconfinder.com/data/icons/color-bold-style/21/14_2-128.png', new kakao.maps.Size(40, 47))
+            }
+            else {
+                // 기본 마커 이미지
+                return new kakao.maps.MarkerImage('https://cdn4.iconfinder.com/data/icons/miscellaneous-outline-32r/32/Location_marker_location_pin_location_pointer_map_locator_map_pin_map_pointer-128.png', new kakao.maps.Size(40, 47));
+            }
+        }
+
         // 클릭 이벤트 생성 함수
-        function makeClickListener(map, marker, customOverlay) {
+        function makeClickListener(map, marker, customOverlay,placename) {
             return function () {
                 // 클릭한 마커에 연결된 커스텀 오버레이를 지도 위에 표시합니다
                 if (openCustomOverlay) {
@@ -113,8 +135,69 @@
                 }
                 customOverlay.setMap(map);
                 openCustomOverlay = customOverlay;
+
+                 // 클라이언트에서 음식점 ID를 서버에 전달하고 음식점 정보 가져오기
+        getRestaurantDataFromServer(placename);
+
+
             };
         }
+
+        function getRestaurantDataFromServer(placename) {
+    $.ajax({
+        type: "POST",
+        url: "/api/getRestaurantData",
+        data: JSON.stringify({ place_name: placename }),
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+            // 서버로부터 받은 음식점 데이터 처리
+            displayRestaurantData(response);
+        }
+    });
+}
+
+function displayRestaurantData(data) {
+    // TODO: 음식점 데이터를 사용하여 HTML에 표시하는 작업
+
+    // 예시: 평가 및 리뷰 폼을 추가
+    var reviewForm = '<h3>평가 및 리뷰</h3>' +
+        '<form id="review-form">' +
+        '<label for="rating-input">평점:</label>' +
+        '<input type="number" id="rating-input" name="rating" min="1" max="5" step="0.1" required>' +
+        '<br>' +
+        '<label for="comment-input">리뷰:</label>' +
+        '<textarea id="comment-input" name="comment" rows="4" required></textarea>' +
+        '<br>' +
+        '<button type="button" onclick="submitReview(\'' + data.place_name + '\')">평가 제출</button>' +
+        '</form>';
+
+    $('#restaurant-info').append(reviewForm);
+}
+
+//평가 및 리뷰 데이터 저장
+function submitReview(placename) {
+    var rating = $('#rating-input').val();
+    var comment = $('#comment-input').val();
+
+    // 클라이언트에서 서버로 평가 및 리뷰 데이터 전송
+    $.ajax({
+        type: "POST",
+        url: "/api/submitReview",
+        data: JSON.stringify({
+            place_name: placename,
+            rating: rating,
+            comment: comment
+        }),
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+            // 성공적으로 전송된 경우, 사용자에게 알림 또는 다른 작업 수행
+            console.log("평가 및 리뷰가 성공적으로 저장되었습니다.");
+        }
+    });
+}
+
+
+   
     </script>
     
 

@@ -34,7 +34,6 @@ body {
   text-transform: uppercase;
   margin: 0.5em 0;
   position: relative;
-  display: inline-block;
   padding: 0 1px;
   font-size: 36px;
 }
@@ -56,19 +55,17 @@ body {
   left: -100%;
   z-index: -999;
 } 
-/*  이미지 서식  */
-    
-.image-center{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%; /* 이미지의 폭을 조절합니다 (예: 전체 폭의 50%) */
-    height: auto; /* 이미지의 높이를 자동으로 조절합니다 */
-    
-}
 /* 텍스트 서식 */
 .projection-description{
     font-size: 40px;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: left; /* 텍스트 정렬 */
+    margin: 20px 0; /* 상하 마진 */
+}
+.projection-description1{
+    font-size: 21px;
+
     color: #000;
     text-align: left; /* 텍스트 정렬 */
     margin: 20px 0; /* 상하 마진 */
@@ -82,7 +79,21 @@ body {
     margin: 10px 0; /* 상하 마진 */
     
 }
-    </style>
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-content {
+    text-align:left;
+}
+
+.img {
+    margin-left: 20px;
+}
+
+</style>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -105,7 +116,7 @@ body {
     </p>
     </div>
     </section>
-  
+
   <section class="hero is-link is-fullheight-with-navbar">
     <div class="hero-body">
       <p class="title">
@@ -116,7 +127,6 @@ body {
         <br>-정글러 친구들이 등록해 놓은 맛집을 방문해보고 나는 어땠는지 리뷰를 추가해보세요! </p>
 
     </div>
-
     
 </body>
 </html>
