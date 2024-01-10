@@ -160,7 +160,7 @@ function displayRestaurantData(data) {
     // TODO: 음식점 데이터를 사용하여 HTML에 표시하는 작업
 
     // 음식점 이름을 제목으로 설정
-    var title = '<h2 class="title">' + data.name + '</h2>';
+    var title = '<h2 class="title">' + data.place_name + '</h2>';
 
     // 기존 리뷰 표시
     var reviewsHtml = '<div><strong>리뷰:</strong></div>';
@@ -190,7 +190,7 @@ function displayRestaurantData(data) {
         '<nav class="level">' +
         '<div class="level-left">' +
         '<div class="level-item">' +
-        '<a class="button is-primary" onclick="submitReview(\'' + data.name + '\')">Submit</a>' +
+        '<a class="button is-primary" onclick="submitReview(\'' + data.place_name + '\')">Submit</a>' +
         '<a class="button is-danger">Cancel</a>' +
         '</div>' +
         '</div>' +
