@@ -14,6 +14,7 @@
 
     <title>Document</title>
     <style>
+      
         .wrap {
             position: absolute;
             left: 0;
@@ -119,6 +120,20 @@
         .info .link {
             color: #5085BB;
         }
+
+    @import url(https://fonts.googleapis.com/css?family=Oswald);
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
+    @import url(https://fonts.googleapis.com/css?family=Pacifico);
+
+.title-nav{
+    font-family: "Pacifico", sans-serif;
+    font-size: 30px;
+    margin-top: 10px;
+    margin-left: 30px;
+    margin-right: 1000px;
+    text-transform: none!important;
+}
+
     </style>
 </head>
 
@@ -128,6 +143,13 @@
     <!-- Navigation Bar -->
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-menu">
+            <!-- 왼쪽에 제목 추가 -->
+            <div class="navbar-start">
+                <div class="navbar-item">
+                    <a class="navbar-item title-nav" href="/">Gourmet in Jungle</a>
+            </div>
+    
+            <!-- 오른쪽 버튼 -->
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
@@ -138,6 +160,7 @@
             </div>
         </div>
     </nav>
+    
 
 
     <!-- Map Container -->
