@@ -138,30 +138,36 @@ def get_restaurant_data():
 # [클라이언트로 받은 리뷰,별점 데이터에 저장]
 @app.route('/api/submitReview', methods=['POST'])
 def submit_review():
-    # 클라이언트로부터 음식점 이름, 평점, 코멘트 받기
-    data = request.json
-    placename = data.get('place_name')
-    rating = data.get('rating')
-    comment = data.get('comment')
+   # 클라이언트로부터 음식점 이름, 평점, 코멘트 받기
+   data = request.json
+   placename = data.get('place_name')
+   rating = data.get('rating')
+   comment = data.get('comment')
 
-    # 음식점이 존재하는지 확인
-    existing_doc = db.review.find_one({'placename': placename})
+   # 음식점이 존재하는지 확인
+   existing_doc = db.review.find_one({'placename': placename})
 
-    if existing_doc:
-        # 음식점이 이미 존재하는 경우, 리뷰 추가
-        db.review.update_one(
+   if existing_doc:
+      # 음식점이 이미 존재하는 경우, 리뷰 추가
+      db.review.update_one(
             {'placename': placename},
-            {'$push': {'reviews': {'rating': rating, 'comment': comment}}}
-        )
-    else:
-        # 음식점이 없는 경우, 새로운 도큐먼트 추가
-        new_doc = {
+            {'$push': {'reviews': {'rating': rating, 'comment':
+               
+               comment}}}
+      )
+      db.total.update_one(
+         {'placename':placename},
+         {'$inc':{'reviewcount':1}}
+      )
+   else:
+      # 음식점이 없는 경우, 새로운 도큐먼트 추가
+      new_doc = {
             'placename': placename,
             'reviews': [{'rating': rating, 'comment': comment}]
-        }
-        db.review.insert_one(new_doc)
+      }
+      db.review.insert_one(new_doc)
 
-    return jsonify({'result': 'success'})
+   return jsonify({'result': 'success'})
 
 
 if __name__ == '__main__':
