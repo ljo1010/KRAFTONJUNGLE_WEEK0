@@ -133,12 +133,17 @@
         .info .link {
             color: #5085BB;
         }
+
+        .icon-large {
+            font-size: 24px;
+            /* 아이콘 크기 조절 */
+            margin-right: 10px;
+            /* 오른쪽 여백 추가 */
+        }
     </style>
 </head>
 
 <body>
-
-
     <!-- Navigation Bar -->
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-menu">
@@ -151,25 +156,30 @@
                 <!-- 오른쪽 버튼 -->
                 <div class="navbar-end">
                     <div class="navbar-item">
+                        <i class="fa-regular fa-face-smile icon-large"></i>
                         <div class="buttons">
                             <a class="button is-light">
-                                <i class="fa-solid fa-face-smile"></i> {{ user_info.nickname }} 님
+                                {{ user_info.nickname }} 님
                             </a>
-                            <a class="button is-primary" href="/">로그아웃</a>
+                            <a class="button is-primary" href="/logout">로그아웃</a>
                         </div>
                     </div>
                 </div>
             </div>
     </nav>
 
-
     <!-- Map Container -->
     <div id="map" style="width: 1200px; height: 600px;"></div>
 
     <!-- 음식점 정보를 표시할 부분 -->
     <div id="restaurant-info" style="width: 2400px;"></div>
-
-
+    <!-- 리뷰를 표시할 부분 -->
+    <div id="reviews-container">
+        <h2>등록된 리뷰입니다.</h2>
+        <ul id="reviews-list">
+            <!-- 여기에 리뷰 목록이 동적으로 추가됩니다. -->
+        </ul>
+    </div>
     <script type="text/javascript">
         $(document).ready(function () {
             // 카카오 맵 API 로드가 완료된 후에 initMap 함수 호출
@@ -242,6 +252,8 @@
                             '        </div>' +
                             '    </div>' +
                             '</div>';
+
+
                         var customOverlay = new kakao.maps.CustomOverlay({
                             position: markerPosition,
                             content: content,
@@ -287,6 +299,13 @@
 
                 // 이전에 열린 폼을 닫는 함수 호출
                 closePreviousForm();
+
+                // 클릭된 마커의 음식점 이름을 가져옴
+                var clickedPlaceName = placename;
+
+                // 해당 음식점의 리뷰를 가져오는 함수 호출
+                fetchReviews(clickedPlaceName);
+
                 // 클릭한 마커에 연결된 커스텀 오버레이를 지도 위에 표시합니다
                 if (openCustomOverlay) {
                     openCustomOverlay.setMap(null);
@@ -365,11 +384,9 @@
                 '</article>' +
                 '</article>';
 
-
             $('#restaurant-info').append(reviewForm);
 
         }
-
 
         function submitReviewAndClose(placename) {
             // submitReview 함수 호출
@@ -401,7 +418,39 @@
             });
         }
 
+        // 특정 음식점의 리뷰를 가져오는 함수
+        function fetchReviews(restaurantName) {
+            $.ajax({
+                type: "GET",
+                url: `/api/getReviews?restaurantName=${restaurantName}`,
+                success: function (response) {
+                    displayReviews(response);
+                },
+                error: function (error) {
+                    console.error("리뷰를 가져오는 동안 오류 발생:", error);
+                }
+            });
+        }
 
+        // 리뷰를 표시하는 함수
+        function displayReviews(reviews) {
+            // 리뷰 목록을 비우고 새로운 리뷰를 추가
+            var reviewsList = $("#reviews-list");
+            reviewsList.empty();
+
+            if (reviews.length === 0) {
+                // 리뷰가 없는 경우 메시지 표시
+                var noReviewMessage = "<li>리뷰가 없습니다.</li>";
+                reviewsList.append(noReviewMessage);
+            } else {
+                // 리뷰가 있는 경우 각 리뷰를 리스트에 추가
+                for (var i = 0; i < reviews.length; i++) {
+                    var review = reviews[i];
+                    var listItem = `<li><strong>평점:</strong> ${review.rating}, <strong>코멘트:</strong> ${review.comment}</li>`;
+                    reviewsList.append(listItem);
+                }
+            }
+        }
     </script>
 </body>
 
