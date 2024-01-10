@@ -8,24 +8,11 @@
     <script type="text/javascript"
         src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- 카카오 맵 API 스크립트를 포함합니다. -->
+    <script type="text/javascript"
+        src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
-    <style>
-        /* 윈도인포 스타일 서식 */
-        /* 1. 오버레이의 전반적인 위치 조정 */
-        .wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
-        .wrap * {padding: 0;margin: 0;}
-        /* 2. 윈도인포의 크기 조정(윈도인포의 전체 화면) */
-        .wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
-        .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
-        /* 3. 닫기창 스타일 및 위치 서식 */
-        .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
-        .info .close:hover {cursor: pointer;}
-        .info .body {position: relative;overflow: hidden;}
-        /* 3. 정보창 서식 */
-        .info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
-        .info .link {color: #5085BB;}
-    </style>
 </head>
 
 <body>
@@ -33,117 +20,158 @@
 
     <!-- Navigation Bar -->
     <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-menu">
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a class="button is-light">님</a>
-                        <a class="button is-primary" href="/">로그아웃</a>
+        <!-- Navigation Bar -->
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-menu">
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-light" href="/login">로그인</a>
+                            <a class="button is-primary" href="/register">회원가입</a>
+                            <a class="button is-light" href="/login">로그인</a>
+                            <a class="button is-primary" href="/register">회원가입</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <!-- Map Container -->
-    <div id="map" style="width: 100%; height: 400px;"></div>
-
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            // 카카오 맵 API 로드가 완료된 후에 initMap 함수 호출
-            kakao.maps.load(initMap);
-        });
-
-        function initMap() {
-            var container = document.getElementById('map');
-            var options = {
-                center: new kakao.maps.LatLng(37.297875428836804, 127.03861803212595),
-                level: 3
-            };
-
-            var map = new kakao.maps.Map(container, options);
-
-            // createMarker 함수 호출
-            createMarker(map);
-        }
+        <!-- Map Container -->
+        <div id="map" style="width: 500px; height: 400px;"></div>
 
 
-        function createMarker(map) {
-
-            var openInfowindow = null; // 현재 열린 인포윈도우를 추적
-
-            $.ajax({
-                type: "POST",
-                url: "/api/createMarker",
-                data: {},
-                success: function (response) {
-                    let datalist = response['data_list']
-
-
-                    for (let i = 0; i < datalist.length; i++) {
-                        let data = datalist[i];
-                        let placename = data['placename'];
-                        let url = data['place_url'];
-                        let lat = parseFloat(data['lat']);
-                        let lng = parseFloat(data['lng']);
-
-                        // 마커가 표시될 위치입니다 
-                        var markerPosition = new kakao.maps.LatLng(lng, lat);
-
-                        // 마커를 생성합니다
-                        var marker = new kakao.maps.Marker({
-                            position: markerPosition
-                        });
-
-                        // 마커가 지도 위에 표시되도록 설정합니다
-                        marker.setMap(map);
-
-                        var content = 
-                            '<div class="wrap">'+
-                                '<div class = "info">'+
-                            '<div class="title">'+ 
-                                placename +
-                                '<div class="close" onclick="closeOverlay()" title="닫기"></div>'+
-                                '</div>'+
-                                // title 끝 이름부분
-                                '<div class = "body">'+
-                                    '<div class = "desc">'+
-                                 '<br><a href="' + url + '" target="_blank" class = "link">상세정보 보기</a></div>'+
-                                        
-                                        '</div>'+
-                                        //body 닫힘
-                                    '</div>'+
-                                    //info 닫힘
-                            '</div>';
-                            
-
-                        // 인포 윈도우 생성
-                        var infowindow = new kakao.maps.InfoWindow({
-                            content: content,
-                            // removable: iwRemoveable
-                        });
-
-                        // 마커 클릭 이벤트 등록
-                        kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow));
-                    }
-                }
+        <script type="text/javascript">
+            $(document).ready(function () {
+                // 카카오 맵 API 로드가 완료된 후에 initMap 함수 호출
+                kakao.maps.load(initMap);
             });
-        }
 
-        // 클릭 이벤트 생성 함수
-        function makeClickListener(map, marker, infowindow) {
+            function initMap() {
+                var container = document.getElementById('map');
+                var options = {
+                    center: new kakao.maps.LatLng(37.297875428836804, 127.03861803212595),
+                    level: 3
+                };
 
-            return function () {
-                // 클릭한 마커에 연결된 인포윈도우를 지도 위에 표시합니다
-                infowindow.open(map, marker);
-            };
-        }
-        //윈도인포를 닫기 위한 함수
-        function closeOverlay(){
-            overlay.setMap(null)
-        }
-    </script>
+                var map = new kakao.maps.Map(container, options);
+
+                // createMarker 함수 호출
+                createMarker(map);
+            }
+
+
+            function createMarker(map) {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/createMarker",
+                    data: {},
+                    success: function (response) {
+                        let datalist = response['data_list']
+
+                        for (let i = 0; i < datalist.length; i++) {
+                            let data = datalist[i]
+                            let placename = data['placename']
+                            let url = data['place_url']
+                            let lat = parseFloat(data['lat']);  // 문자열을 숫자로 변환
+                            let lng = parseFloat(data['lng']);  // 문자열을 숫자로 변환
+
+                            // 마커가 표시될 위치입니다 
+                            var markerPosition = new kakao.maps.LatLng(lng, lat);
+
+                            // 마커를 생성합니다
+                            var marker = new kakao.maps.Marker({
+                                position: markerPosition
+                            });
+
+                            // 마커가 지도 위에 표시되도록 설정합니다
+                            marker.setMap(map);
+
+                        }
+
+                    }
+                })
+            }
+        </script>
+        <!-- Map Container -->
+        <div id="map" style="width: 500px; height: 400px;"></div>
+
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                // 카카오 맵 API 로드가 완료된 후에 initMap 함수 호출
+                kakao.maps.load(initMap);
+            });
+
+            var openCustomOverlay = null; // 커스텀 오버레이를 추적하는 변수를 함수 밖에 정의
+
+            function initMap() {
+                var container = document.getElementById('map');
+                var options = {
+                    center: new kakao.maps.LatLng(37.297875428836804, 127.03861803212595),
+                    level: 3
+                };
+
+                var map = new kakao.maps.Map(container, options);
+
+                // createMarker 함수 호출
+                createMarker(map);
+            }
+
+
+            function createMarker(map) {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/createMarker",
+                    data: {},
+                    success: function (response) {
+                        let datalist = response['data_list'];
+
+                        for (let i = 0; i < datalist.length; i++) {
+                            let data = datalist[i];
+                            let placename = data['placename'];
+                            let url = data['place_url'];
+                            let lat = parseFloat(data['lat']);
+                            let lng = parseFloat(data['lng']);
+
+                            // 마커가 표시될 위치입니다 
+                            var markerPosition = new kakao.maps.LatLng(lng, lat);
+
+                            // 마커를 생성합니다
+                            var marker = new kakao.maps.Marker({
+                                position: markerPosition
+                            });
+
+                            // 마커가 지도 위에 표시되도록 설정합니다
+                            marker.setMap(map);
+
+                            // 커스텀 오버레이 생성
+                            var content = '<div style="padding:5px;font-size:12px;">' + placename + '<br><a href="' + url + '" target="_blank">상세정보 보기</a></div>';
+                            var customOverlay = new kakao.maps.CustomOverlay({
+                                position: markerPosition,
+                                content: content,
+                                xAnchor: 0.5,
+                                yAnchor: 1.5,
+                            });
+
+                            // 마커 클릭 이벤트 등록
+                            kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, customOverlay));
+                        }
+                    }
+                });
+            }
+
+            // 클릭 이벤트 생성 함수
+            function makeClickListener(map, marker, customOverlay) {
+                return function () {
+                    // 클릭한 마커에 연결된 커스텀 오버레이를 지도 위에 표시합니다
+                    if (openCustomOverlay) {
+                        openCustomOverlay.setMap(null);
+                    }
+                    customOverlay.setMap(map);
+                    openCustomOverlay = customOverlay;
+                };
+            }
+        </script>
 </body>
 
 </html>

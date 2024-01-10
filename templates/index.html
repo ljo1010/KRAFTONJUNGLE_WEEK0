@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>크래프톤 정글 TEAM5 | Gourmet in Jungle</title>
-    <!-- bulma css 추가 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.css') }}" />
     <!-- 카카오 맵 API 스크립트를 포함합니다. -->
     <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -108,7 +107,7 @@ body {
   <section class="hero is-link is-fullheight-with-navbar">
     <div class="hero-body">
       <p class="title">
-        <img src="background1.png" alt="" class="image-center">
+        <img src="{{ url_for('static', filename='img/background1.png') }}" class="image-center">
       </p>
       <p class = "projection-description"><b>정글러들을 위한 <br>맛집 공유 프로젝트</b></p>
       <p class = "projection-description1">-내가 갔던 맛집의 위치를 클릭해 리뷰를 남기고 정글러들과 공유 해보세요
@@ -116,9 +115,8 @@ body {
 
     </div>
   </section>
-
-	
-
+<<<<<<< HEAD
+=======
     <!-- Map Container -->
     <div id="map" style="width: 500px; height: 400px;"></div> 
     
@@ -178,5 +176,6 @@ body {
         
 	    </script>
         
+>>>>>>> a85a64c9822760e9a45b0952bafd06d578e6dc5b
 </body>
 </html>
