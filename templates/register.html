@@ -3,66 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.css') }}" />
+    <script defer src="https://use.fontawesome.com/releases/v6.4.0/js/all.js"></script>
 </head>
+<style>
+    @import url(https://fonts.googleapis.com/css?family=Oswald);
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
+    @import url(https://fonts.googleapis.com/css?family=Pacifico);
+    #title {
+        text-align: center; /* 텍스트를 가운데 정렬합니다 */
+    }
+
+    .style-1 {
+        font-family: "Pacifico", sans-serif;
+        margin-top: 100px;
+        width: 100%;
+        font-size: 50px;
+        text-transform: none!important;
+        /* 추가적인 스타일링이 필요하면 여기에 작성 */
+    }
+    .my-column-height {
+        height: 500px; /* 원하는 높이로 설정 */
+    }
+
+    .label {
+        color: #00d1b2;
+    }
+    .signup-header{
+        font-family: "Pacifico", sans-serif;
+        font-size: 30px;
+        text-align: center;
+        margin-bottom: 20px; /* 하단 여백 */
+    }
+    .signin-button {
+        width: 100%; /* 버튼의 너비를 부모 요소의 너비에 맞춥니다 */
+        font-weight: bold;
+    }
+    .register {
+        text-align: center;
+    }
+
+    .register a {
+        color: #00d1b2 !important; /* 회원가입 링크에만 색상 적용 */
+        margin-left: 10px; /* 링크와 텍스트 사이의 여백 추가 */
+    }
+    .control {
+        margin-top: 5px;
+    }
+</style>
 <body>
+    <div class="hero is-primary is-fullheight">
+        <div id="title">
+            <h1 class="style-1">Gourmet in Jungle</h1>
+        </div>
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-5 my-column-height">
+                        <form action="/api/register" method="post" class="box">
+                            <div class="signup-header">SignUp</div>
 
-<section class="section">
-    <div class="container">
-        <div class="columns is-centered">
-            <div class="column is-one-third">
-                <form action="/api/register" method="post">
-                    <h1 class="title">회원가입</h1>
+                            <!-- Server Message -->
+                            {% if msg %}
+                            <div class="notification is-danger">
+                                {{ msg }}
+                            </div>
+                            {% endif %}
 
-                    <!-- Server Message -->
-                    {% if msg %}
-                    <div class="notification is-danger">
-                        {{ msg }}
-                    </div>
-                    {% endif %}
-                    
-                    <!-- ID Field -->
-                    <div class="field">
-                        <label class="label">아이디</label>
-                        <div class="control">
-                            <input class="input" type="text" name="id_give" placeholder="아이디 입력">
-                        </div>
-                    </div>
+                            <!-- ID Field -->
+                            <div class="field">
+                                <label class="label">아이디</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="text" name="id_give" placeholder="아이디 입력">
+                                    <span class="icon is-small is-left">
+                                        <i class="fa-solid fa-user"></i>
+                                    </span>
+                                </div>
+                            </div>
 
-                    <!-- Password Field -->
-                    <div class="field">
-                        <label class="label">비밀번호</label>
-                        <div class="control">
-                            <input class="input" type="password" name="pw_give" placeholder="비밀번호 입력">
-                        </div>
-                    </div>
+                            <!-- Password Field -->
+                            <div class="field">
+                                <label class="label">비밀번호</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="password" name="pw_give" placeholder="비밀번호 입력">
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                </div>
+                            </div>
 
-                    <!-- Nickname Field -->
-                    <div class="field">
-                        <label class="label">닉네임</label>
-                        <div class="control">
-                            <input class="input" type="text" name="nickname_give" placeholder="닉네임 입력">
-                        </div>
-                    </div>
+                            <!-- Nickname Field -->
+                            <div class="field">
+                                <label class="label">닉네임</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="text" name="nickname_give" placeholder="닉네임 입력">
+                                    <span class="icon is-small is-left">
+                                        <i class="fa-solid fa-face-smile"></i>
+                                    </span>
+                                </div>
+                            </div>
 
-                    <!-- Submit Button -->
-                    <div class="field">
-                        <div class="control">
-                            <button class="button is-link">회원가입</button>
-                        </div>
-                    </div>
+                            <!-- Submit Button -->
+                            <div class="field">
+                                <div class="control">
+                                    <button class="button is-info signin-button">회원가입</button>
+                                </div>
+                            </div>
 
-                    <!-- Cancel Button -->
-                    <div class="field">
-                        <div class="control">
-                            <button class="button is-light" onclick="window.history.back(); return false;">취소</button>
-                        </div>
+                            <!-- Cancel Button -->
+                            <div class="field">
+                                <div class="control">
+                                    <button class="button is-light signin-button" onclick="window.history.back(); return false;">취소</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-</section>
+</body>
+
 
 </body>
 </html>

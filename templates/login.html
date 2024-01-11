@@ -3,17 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Login Page</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.css') }}" />
+    <script defer src="https://use.fontawesome.com/releases/v6.4.0/js/all.js"></script>
 </head>
-<body>
+<style>
+@import url(https://fonts.googleapis.com/css?family=Oswald);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
+@import url(https://fonts.googleapis.com/css?family=Pacifico);
+#title {
+    text-align: center; /* 텍스트를 가운데 정렬합니다 */
+}
 
-<section class="section">
+.style-1 {
+    font-family: "Pacifico", sans-serif;
+    margin-top: 100px;
+    width: 100%;
+    font-size: 50px;
+    text-transform: none!important;
+    /* 추가적인 스타일링이 필요하면 여기에 작성 */
+}
+.my-column-height {
+    height: 500px; /* 원하는 높이로 설정 */
+}
+
+.label {
+    color: #00d1b2;
+}
+.login-header{
+    font-family: "Pacifico", sans-serif;
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 20px; /* 하단 여백 */
+    
+}
+.login-button {
+    width: 100%; /* 버튼의 너비를 부모 요소의 너비에 맞춥니다 */
+    font-weight: bold;
+}
+.register {
+    text-align: center;
+}
+
+.register a {
+    color: #00d1b2 !important; /* 회원가입 링크에만 색상 적용 */
+    margin-left: 10px; /* 링크와 텍스트 사이의 여백 추가 */
+}
+.control{
+margin-top: 5px;
+}
+</style>
+<body>
+    <div class="hero is-primary is-fullheight">
+        <div id="title">
+            <h1 class="style-1">Gourmet in Jungle</h1>
+        </div>
+    <div class="hero-body">
     <div class="container">
         <div class="columns is-centered">
-            <div class="column is-one-third">
-                <form action="/api/login" method="post">
-                    <h1 class="title">로그인</h1>
-                    
+            <div class="column is-5 my-column-height">
+                <form action="/api/login" method="post" class="box">
+                    <div class="login-header">Login</div>
                     <!-- Server Message -->
                     {% if msg %}
                     <div class="notification is-danger">
@@ -23,37 +72,44 @@
                     <!-- ID Field -->
                     <div class="field">
                         <label class="label">아이디</label>
-                        <div class="control">
+                        <div class="control has-icons-left">
                             <input class="input" type="text" name="id_give" placeholder="아이디 입력">
+                            <span class="icon is-small is-left">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
                         </div>
                     </div>
 
                     <!-- Password Field -->
                     <div class="field">
                         <label class="label">비밀번호</label>
-                        <div class="control">
+                        <div class="control has-icons-left">
                             <input class="input" type="password" name="pw_give" placeholder="비밀번호 입력">
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-lock"></i>
+                            </span>
                         </div>
                     </div>
 
                     <!-- Submit Button -->
                     <div class="field">
                         <div class="control">
-                            <button class="button is-link">제출</button>
+                            <button class="button is-info login-button">로그인</button>
                         </div>
                     </div>
 
                     <!-- Register Link -->
                     <div class="field">
-                        <div class="control">
-                            <a href="/register">회원가입</a>
+                        <div class="control register">
+                            <span>회원이 아니시라면?</span><a href="/register"><strong>회원가입</strong></a>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</section>
+    </div>
+    </div>
 
 </body>
 </html>

@@ -4,10 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>크래프톤 정글 TEAM5 | Gourmet in Jungle</title>
-    <!-- bulma css 추가 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.css') }}" />
 
-<style>
+    <!-- 카카오 맵 API 스크립트를 포함합니다. -->
+    <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=3685359af7ca6763d779579b4174dce7"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+@import url(https://fonts.googleapis.com/css?family=Oswald);
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
+
+@import url(https://fonts.googleapis.com/css?family=Pacifico);
+
+
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+
+
 body {
   background-color: #fff;
   color: #111111;
@@ -24,7 +36,6 @@ body {
   text-transform: uppercase;
   margin: 0.5em 0;
   position: relative;
-  display: inline-block;
   padding: 0 1px;
   font-size: 36px;
 }
@@ -46,31 +57,42 @@ body {
   left: -100%;
   z-index: -999;
 } 
-/*  이미지 서식  */
-    
-.image-center{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%; /* 이미지의 폭을 조절합니다 (예: 전체 폭의 50%) */
-    height: auto; /* 이미지의 높이를 자동으로 조절합니다 */
-}
 /* 텍스트 서식 */
 .projection-description{
-    font-size: 30px;
-    color: #000;
-    text-align: right; /* 텍스트 정렬 */
-    margin: 10px 0; /* 상하 마진 */
-    margin-left: 20px;
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 58px;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: left; /* 텍스트 정렬 */
+    margin-bottom: 30px;
 }
 .projection-description1{
-    font-size: 20px;
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 35px;
+    font-weight: 400;
+
     color: #fff;
     text-align: left; /* 텍스트 정렬 */
-    margin: 10px 0; /* 상하 마진 */
+    margin: 20px 0; /* 상하 마진 */
     
 }
-    </style>
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-content {
+    text-align:left;
+}
+
+.img img {
+    height: 300px; /* 이미지 높이 설정 */
+    width: 400px; /* 이미지 너비를 비율에 맞게 자동 조정 */
+    margin-left : 30px;
+}
+
+</style>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -93,19 +115,20 @@ body {
     </p>
     </div>
     </section>
-  
-  <section class="hero is-link is-fullheight-with-navbar">
-    <div class="hero-body">
-      <p class="title">
-        <img src="background1.png" alt="" class="image-center">
-        <img src="background2.png" alt="" class="image-center">
-      </p>
-      <p class = "projection-description"><b>정글러들을 위한 맛집 공유 프로젝트</b></p>
-      <p class = "projection-description1">-내가 갔던 맛집의 위치를 클릭해 리뷰를 남기고 정글러들과 공유 해보세요
-        <br>-정글러 친구들이 등록해 놓은 맛집을 방문해보고 나는 어땠는지 리뷰를 추가해보세요! </p>
 
-    </div>
-  </section>
-
+    <section class="hero is-info is-fullheight-with-navbar">
+        <div class="hero-body">
+            <div class="container flex-container">
+                <div class="text-content">
+                    <p class="projection-description">정글러들을 위한<br>맛집 공유 프로젝트</p>
+                    <p class="projection-description1">방문했던 식당의 마커를 눌러 리뷰와 별점을 남기고 <br> 같이 일하는 동료들과 공유해보세요!
+                </div>
+                <div class="img">
+                    <img src="{{ url_for('static', filename='img/background1.png') }}">
+                </div>
+            </div>
+        </div>
+    </section>
+    
 </body>
 </html>

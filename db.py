@@ -55,9 +55,12 @@ for i in range(0,len(total)-1):
         'lat' : lat,
         'lng' : lng,
         'road_addresss_name' : address,
-        'place_url' : place_url
+        'place_url' : place_url,
+        'reviewcount':0
     }
     db.total.insert_one(doc)
+
+
 
 
 

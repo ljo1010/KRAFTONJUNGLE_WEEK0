@@ -5,7 +5,15 @@ import jwt
 import requests
 from bs4 import BeautifulSoup
 from bson import ObjectId
-from flask import Flask, jsonify, redirect, render_template, request, url_for
+from flask import (
+    Flask,
+    jsonify,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 from pymongo import MongoClient
 
 # Flask 애플리케이션 초기화
@@ -34,8 +42,15 @@ def register():
 
 @app.route('/main')
 def main():
-   msg = request.args.get("msg")
-   return render_template('main.html', msg=msg)
+   token_receive = request.cookies.get('mytoken')
+   try:
+      payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+      user_info = db.user.find_one({"userId": payload['id']})
+      return render_template('main.html', user_info=user_info)
+   except jwt.ExpiredSignatureError:
+      return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+   except jwt.exceptions.DecodeError:
+      return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 # [회원가입 API]
 @app.route('/api/register', methods=['POST'])
@@ -84,18 +99,104 @@ def api_login():
       }
       token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
       
-# 로그인 성공, main.html로 리디렉트
-      return redirect(url_for('main'))
+# 로그인 성공, 응답 객체 생성
+      response = make_response(redirect(url_for('main')))
+      # 쿠키에 토큰 설정
+      response.set_cookie('mytoken', token)
+
+      return response
    else:
-# 로그인 실패, 로그인 페이지에 에러 메시지와 함께 렌더링
+      # 로그인 실패, 로그인 페이지에 에러 메시지와 함께 렌더링
       return render_template('login.html', msg='아이디/비밀번호가 일치하지 않습니다.')
    
+@app.route('/logout')
+def logout():
+   response = make_response(redirect(url_for('login')))
+   response.delete_cookie('mytoken')  # JWT 토큰 쿠키를 삭제합니다.
+   return response
+
 
 # [마커 생성 API]
 @app.route('/api/createMarker',methods=['POST'])
 def create_marker():
-   data = list(db.total.find({}, {'_id': 0}))  # _id 필드를 제외하고 데이터 조회
+   data = list(db.total.find({}, {'_id': 0}))
    return jsonify({'result': 'success','data_list':data})
- 
+
+
+# [ 음식점 ID 받아서 정보넘겨 주기 API]
+@app.route('/api/getRestaurantData', methods=['POST'])
+def get_restaurant_data():
+   # 클라이언트로부터 음식점 ID 받기
+   place_name = request.json.get('place_name')
+
+   # TODO: 음식점 ID를 사용하여 데이터베이스에서 음식점 정보 가져오기
+   restaurant_data = db.total.find_one({'placename': place_name})
+
+   # 응답 데이터 생성 및 전송
+   response_data = {
+      'place_name': place_name,
+      'reviewcount': restaurant_data.get('reviewcount', 0)
+   }
+
+   return jsonify(response_data)
+
+
+# [클라이언트로 받은 리뷰,별점 데이터에 저장]
+@app.route('/api/submitReview', methods=['POST'])
+def submit_review():
+   # 클라이언트로부터 음식점 이름, 평점, 코멘트 받기
+   data = request.json
+   placename = data.get('place_name')
+   rating = data.get('rating')
+   comment = data.get('comment')
+
+   # 음식점이 존재하는지 확인
+   existing_doc = db.review.find_one({'placename': placename})
+
+   if existing_doc:
+      # 음식점이 이미 존재하는 경우, 리뷰 추가
+      db.review.update_one(
+            {'placename': placename},
+            {'$push': {'reviews': {'rating': rating, 'comment':
+               
+               comment}}}
+      )
+      db.total.update_one(
+         {'placename':placename},
+         {'$inc':{'reviewcount':1}}
+      )
+   else:
+      # 음식점이 없는 경우, 새로운 도큐먼트 추가
+      new_doc = {
+            'placename': placename,
+            'reviews': [{'rating': rating, 'comment': comment}]
+      }
+      db.review.insert_one(new_doc)
+
+   return jsonify({'result': 'success'})
+
+#[리뷰 노출 API]
+@app.route('/api/getReviews', methods=['GET'])
+def fetch_reviews():
+    restaurant_name = request.args.get('restaurantName')
+
+    # MongoDB에서 해당 음식점의 리뷰를 가져옴
+    reviews_cursor = db.review.find({'placename': restaurant_name})
+    
+    # 리뷰가 배열로 저장되어 있다고 가정
+    reviews = []
+    for review_doc in reviews_cursor:
+        for review in review_doc.get('reviews', []):
+            reviews.append({
+                'comment': review.get('comment', ''),
+                'rating': review.get('rating', 0)
+            })
+
+    return jsonify(reviews)
+
+
+
+
+
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
